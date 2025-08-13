@@ -1,11 +1,9 @@
 package letterally.exceptions;
 
-import BuildWeekEpicEnergyServices.payloads.ErrorsDTO;
-import BuildWeekEpicEnergyServices.payloads.ErrorsWithListDTO;
+import letterally.payloads.ErrorsDTO;
+import letterally.payloads.ErrorsWithListDTO;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -36,6 +34,12 @@ public class ExceptionsHandler {
     @ExceptionHandler(UnauthorisedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED) // 401
     public ErrorsDTO handleUnauthorized(UnauthorisedException ex) {
+        return new ErrorsDTO(ex.getMessage(), LocalDateTime.now());
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorsDTO handleBadRq(RuntimeException ex) {
         return new ErrorsDTO(ex.getMessage(), LocalDateTime.now());
     }
 
