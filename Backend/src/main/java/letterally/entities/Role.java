@@ -3,6 +3,7 @@ package letterally.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -18,13 +19,19 @@ public class Role {
     @Setter(AccessLevel.NONE)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    public String name;
+    @Column(nullable = false, unique = true, length = 50)
+    private String name;
 
     @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
-    private Set<User> users;
+    @Setter(AccessLevel.NONE)
+    private Set<User> users = new HashSet<>();
 
     public Role(String name) {
-        this.name = name;
+        setName(name);
     }
+
+    public void setName(String name) {
+        this.name = (name == null) ? null : name.trim().toUpperCase();
+    }
+
 }

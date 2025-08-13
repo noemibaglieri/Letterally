@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -91,6 +92,10 @@ public class UsersService {
         usersRepository.delete(user);
     }
 
+
+    public List<User> findAll() {
+        return usersRepository.findAll();
+    }
 
     public Map<String, String> uploadAvatar(long id, MultipartFile file) {
         User user = usersRepository.findById(id)
