@@ -69,6 +69,11 @@ public class UsersController {
         return this.usersService.update(currentAuthenticatedUser.getId(), payload);
     }
 
+    @PatchMapping("/me/avatar")
+    public Map<String, String> updateOwnAvatar(@AuthenticationPrincipal User currentUser, @RequestParam("avatar") MultipartFile file) {
+        return this.usersService.uploadAvatar(currentUser.getId(), file);
+    }
+
     @DeleteMapping("/me")
     public void deleteOwnProfile(@AuthenticationPrincipal User currentAuthenticatedUser) {
         this.usersService.delete(currentAuthenticatedUser.getId());
