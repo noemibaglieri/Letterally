@@ -27,7 +27,7 @@ public class ExceptionsHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorsWithListDTO handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
         var errors = ex.getBindingResult().getFieldErrors().stream()
-                .map(e -> e.getField() + ": " + e.getDefaultMessage())
+                .map(e -> e.getField() + " * " + e.getDefaultMessage())
                 .toList();
         return new ErrorsWithListDTO("Validation failed", LocalDateTime.now(), errors);
     }
@@ -36,7 +36,7 @@ public class ExceptionsHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorsWithListDTO handleConstraintViolation(ConstraintViolationException ex) {
         var errors = ex.getConstraintViolations().stream()
-                .map(v -> v.getPropertyPath() + ": " + v.getMessage())
+                .map(v -> v.getPropertyPath() + " * " + v.getMessage())
                 .toList();
         return new ErrorsWithListDTO("Validation failed", LocalDateTime.now(), errors);
     }
@@ -45,7 +45,7 @@ public class ExceptionsHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorsWithListDTO handleBindException(org.springframework.validation.BindException ex) {
         var errors = ex.getBindingResult().getFieldErrors().stream()
-                .map(e -> e.getField() + ": " + e.getDefaultMessage())
+                .map(e -> e.getField() + " * " + e.getDefaultMessage())
                 .toList();
         return new ErrorsWithListDTO("Validation failed", LocalDateTime.now(), errors);
     }
