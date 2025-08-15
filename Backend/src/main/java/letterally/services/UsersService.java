@@ -47,7 +47,7 @@ public class UsersService {
         User newUser = new User(payload.username(), payload.email(), bCrypt.encode(payload.password()), payload.dateOfBirth());
         newUser.setAvatar("https://ui-avatars.com/api/?name=" + payload.username());
 
-        Role defaultRole = rolesRepository.findByName("USER").orElseThrow(() -> new RuntimeException("Role * USER * not found in DB"));
+        Role defaultRole = this.rolesRepository.findByName("USER").orElseThrow(() -> new RuntimeException("Role * USER * not found in DB"));
         newUser.setRole(defaultRole);
 
         this.usersRepository.save(newUser);
@@ -55,11 +55,11 @@ public class UsersService {
     }
 
     public User update(Long id, UpdateUserDTO payload) {
-        User existingUser = usersRepository.findById(id)
+        User existingUser = this.usersRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User with id * " + id + " * not found"));
 
         if (payload.username() != null && !payload.username().isBlank()) {
-            usersRepository.findByUsername(payload.username()).ifPresent(user -> {
+            this.usersRepository.findByUsername(payload.username()).ifPresent(user -> {
                 if (!user.getId().equals(id)) {
                     throw new BadRequestException("Username already in use");
                 }
@@ -68,7 +68,7 @@ public class UsersService {
         }
 
         if (payload.email() != null && !payload.email().isBlank()) {
-            usersRepository.findByEmail(payload.email()).ifPresent(user -> {
+            this.usersRepository.findByEmail(payload.email()).ifPresent(user -> {
                 if (!user.getId().equals(id)) {
                     throw new BadRequestException("Email already in use");
                 }
@@ -84,21 +84,21 @@ public class UsersService {
             existingUser.setPassword(bCrypt.encode(payload.password()));
         }
 
-        return usersRepository.save(existingUser);
+        return this.usersRepository.save(existingUser);
     }
 
     public void delete(Long id) {
-        User user = usersRepository.findById(id).orElseThrow(() -> new NotFoundException("User with id * " + id + " * not found"));
-        usersRepository.delete(user);
+        User user = this.usersRepository.findById(id).orElseThrow(() -> new NotFoundException("User with id * " + id + " * not found"));
+        this.usersRepository.delete(user);
     }
 
 
     public List<User> findAll() {
-        return usersRepository.findAll();
+        return this.usersRepository.findAll();
     }
 
     public Map<String, String> uploadAvatar(long id, MultipartFile file) {
-        User user = usersRepository.findById(id)
+        User user = this.usersRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User ID not found * " + id + " *"));
 
         try {
@@ -107,7 +107,7 @@ public class UsersService {
                     .get("url");
 
             user.setAvatar(avatar);
-            usersRepository.save(user);
+            this.usersRepository.save(user);
 
             return Map.of("avatar", avatar);
 

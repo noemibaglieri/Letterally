@@ -19,30 +19,30 @@ public class RolesService {
 
     public Role save(NewRoleDTO payload) {
         String name = payload.name().trim().toUpperCase();
-        if (rolesRepository.existsByName(name))
+        if (this.rolesRepository.existsByName(name))
             throw new BadRequestException("Role * " + name + " * already exists");
-        return rolesRepository.save(new Role(name));
+        return this.rolesRepository.save(new Role(name));
     }
 
     public Role update(Long id, UpdateRoleDTO payload) {
-        Role existingRole = rolesRepository.findById(id)
+        Role existingRole = this.rolesRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Role id * " + id + " * not found"));
 
         String newName = payload.name().trim().toUpperCase();
 
-        if (!newName.equals(existingRole.getName()) && rolesRepository.existsByName(newName)) {
+        if (!newName.equals(existingRole.getName()) && this.rolesRepository.existsByName(newName)) {
             throw new BadRequestException("Role * " + newName + " * already exists");
         }
 
         existingRole.setName(newName);
-        return rolesRepository.save(existingRole);
+        return this.rolesRepository.save(existingRole);
     }
 
     public void delete(Long id) {
-        if (!rolesRepository.existsById(id)) {
+        if (!this.rolesRepository.existsById(id)) {
             throw new NotFoundException("Role id * " + id + " * not found");
         }
-        rolesRepository.deleteById(id);
+        this.rolesRepository.deleteById(id);
     }
 
     public Role findById(Long id) {
