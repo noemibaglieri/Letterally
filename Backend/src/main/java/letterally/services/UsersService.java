@@ -55,7 +55,7 @@ public class UsersService {
     }
 
     public User update(Long id, UpdateUserDTO payload) {
-        User existingUser = this.usersRepository.findById(id)
+        User found = this.usersRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User with id * " + id + " * not found"));
 
         if (payload.username() != null && !payload.username().isBlank()) {
@@ -64,7 +64,7 @@ public class UsersService {
                     throw new BadRequestException("Username already in use");
                 }
             });
-            existingUser.setUsername(payload.username());
+            found.setUsername(payload.username());
         }
 
         if (payload.email() != null && !payload.email().isBlank()) {
@@ -73,18 +73,18 @@ public class UsersService {
                     throw new BadRequestException("Email already in use");
                 }
             });
-            existingUser.setEmail(payload.email());
+            found.setEmail(payload.email());
         }
 
         if (payload.avatar() != null && !payload.avatar().isBlank()) {
-            existingUser.setAvatar(payload.avatar());
+            found.setAvatar(payload.avatar());
         }
 
         if (payload.password() != null && !payload.password().isBlank()) {
-            existingUser.setPassword(bCrypt.encode(payload.password()));
+            found.setPassword(bCrypt.encode(payload.password()));
         }
 
-        return this.usersRepository.save(existingUser);
+        return this.usersRepository.save(found);
     }
 
     public void delete(Long id) {

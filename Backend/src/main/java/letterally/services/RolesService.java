@@ -25,17 +25,17 @@ public class RolesService {
     }
 
     public Role update(Long id, UpdateRoleDTO payload) {
-        Role existingRole = this.rolesRepository.findById(id)
+        Role found = this.rolesRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Role id * " + id + " * not found"));
 
         String newName = payload.name().trim().toUpperCase();
 
-        if (!newName.equals(existingRole.getName()) && this.rolesRepository.existsByName(newName)) {
+        if (!newName.equals(found.getName()) && this.rolesRepository.existsByName(newName)) {
             throw new BadRequestException("Role * " + newName + " * already exists");
         }
 
-        existingRole.setName(newName);
-        return this.rolesRepository.save(existingRole);
+        found.setName(newName);
+        return this.rolesRepository.save(found);
     }
 
     public void delete(Long id) {
