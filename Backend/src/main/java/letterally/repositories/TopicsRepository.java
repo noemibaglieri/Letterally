@@ -12,9 +12,11 @@ import java.util.List;
 
 @Repository
 public interface TopicsRepository extends JpaRepository<Topic, Long> {
-    List<Topic> findByStartDateBeforeAndEndDateAfter(LocalDate startDate, LocalDate endDate);
-    Page<Topic> findByStartDateAfter(LocalDate date, Pageable pageable);
-    Page<Topic> findByEndDateBefore(LocalDate date, Pageable pageable);
+    List<Topic> findByStartDateLessThanEqualAndEndDateGreaterThan(LocalDate startDate, LocalDate endDate);
     Page<Topic> findByCategory(Category category, Pageable pageable);
+    Page<Topic> findByEndDateBeforeOrStartDateLessThanEqualAndEndDateGreaterThan(
+            LocalDate endDate, LocalDate startDate, LocalDate endDate2, Pageable pageable
+    );
+
 }
 

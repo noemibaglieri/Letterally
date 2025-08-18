@@ -2,6 +2,7 @@ package letterally.services;
 
 import letterally.entities.Category;
 import letterally.entities.Topic;
+import letterally.entities.User;
 import letterally.exceptions.NotFoundException;
 import letterally.payloads.NewTopicDTO;
 import letterally.payloads.UpdateTopicDTO;
@@ -81,25 +82,25 @@ public class TopicsService {
     }
 
     public List<Topic> findActiveTopics(LocalDate today) {
-        return this.topicsRepository.findByStartDateBeforeAndEndDateAfter(today, today);
+        return this.topicsRepository.findByStartDateLessThanEqualAndEndDateGreaterThan(today, today);
     }
 
-    public Page<Topic> findAll(Pageable pageable) {
-        return topicsRepository.findAll(pageable);
+    public Page<Topic> findAll(Pageable pageable, User currentUser, LocalDate referenceDate) {
+        boolean isAdmin = currentUser.getRole().getName().equals("ADMIN");
+
+        if (isAdmin) {
+            return topicsRepository.findAll(pageable);
+        } else {
+            return topicsRepository.findByEndDateBeforeOrStartDateLessThanEqualAndEndDateGreaterThan(
+                    referenceDate, referenceDate, referenceDate, pageable
+            );
+        }
     }
 
     public Page<Topic> findByCategory(Long categoryId, Pageable pageable) {
         Category category = this.categoriesRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException("Category id * " + categoryId + " * not found"));
         return this.topicsRepository.findByCategory(category, pageable);
-    }
-
-    public Page<Topic> findPastTopics(LocalDate today, Pageable pageable) {
-        return topicsRepository.findByEndDateBefore(today, pageable);
-    }
-
-    public Page<Topic> findFutureTopics(LocalDate today, Pageable pageable) {
-        return topicsRepository.findByStartDateAfter(today, pageable);
     }
 }
 

@@ -1,6 +1,7 @@
 package letterally.controllers;
 
 import letterally.entities.Topic;
+import letterally.entities.User;
 import letterally.payloads.NewTopicDTO;
 import letterally.payloads.UpdateTopicDTO;
 import letterally.services.TopicsService;
@@ -9,7 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,56 +50,27 @@ public class TopicsController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
     public Page<Topic> getAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String direction
+            @RequestParam(defaultValue = "asc") String direction,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @AuthenticationPrincipal User currentUser
     ) {
-        Sort sort = direction.equalsIgnoreCase("desc") ?
-                Sort.by(sortBy).descending() :
-                Sort.by(sortBy).ascending();
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
 
         Pageable pageable = PageRequest.of(page, size, sort);
-        return this.topicsService.findAll(pageable);
+        LocalDate referenceDate = (date != null) ? date : LocalDate.now();
+
+        return topicsService.findAll(pageable, currentUser, referenceDate);
     }
 
     @GetMapping("/active")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public List<Topic> getActive() {
         return this.topicsService.findActiveTopics(LocalDate.now());
-    }
-
-    @GetMapping("/past")
-    public Page<Topic> getPast(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String direction
-    ) {
-        Sort sort = direction.equalsIgnoreCase("desc") ?
-                Sort.by(sortBy).descending() :
-                Sort.by(sortBy).ascending();
-
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return this.topicsService.findPastTopics(LocalDate.now(), pageable);
-    }
-
-    @GetMapping("/future")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public Page<Topic> getFuture(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String direction
-    ) {
-        Sort sort = direction.equalsIgnoreCase("desc") ?
-                Sort.by(sortBy).descending() :
-                Sort.by(sortBy).ascending();
-
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return this.topicsService.findFutureTopics(LocalDate.now(), pageable);
     }
 
     @GetMapping("/category/{categoryId}")
