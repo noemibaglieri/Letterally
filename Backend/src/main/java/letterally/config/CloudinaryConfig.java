@@ -1,4 +1,4 @@
-package letterally.Config;
+package letterally.config;
 
 import com.cloudinary.Cloudinary;
 import org.springframework.beans.factory.annotation.Value;

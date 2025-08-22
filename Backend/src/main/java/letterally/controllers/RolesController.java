@@ -37,7 +37,7 @@ public class RolesController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('ADMIN')")
     public Role save(@RequestBody @Validated NewRoleDTO payload) {
-        return rolesService.save(payload);
+        return this.rolesService.save(payload);
     }
 
     @PutMapping("/{roleId}")
