@@ -4,8 +4,10 @@ import letterally.entities.Essay;
 import letterally.entities.User;
 import letterally.exceptions.BadRequestException;
 import letterally.exceptions.ValidationException;
+import letterally.payloads.EssayRespDTO;
 import letterally.payloads.NewEssayDTO;
 import letterally.payloads.UpdateEssayDTO;
+import letterally.payloads.VoteRespDTO;
 import letterally.services.EssaysService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/essays")
 public class EssaysController {
@@ -25,40 +29,167 @@ public class EssaysController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Page<Essay> getAll(@RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "20") int size,
-                              @RequestParam(defaultValue = "createdOn") String sortBy,
-                              @RequestParam(defaultValue = "desc") String direction) {
-        return this.essaysService.findAll(page, size, sortBy, direction);
+    public Page<EssayRespDTO> getAll(@RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "20") int size,
+                                     @RequestParam(defaultValue = "createdOn") String sortBy,
+                                     @RequestParam(defaultValue = "desc") String direction) {
+        Page<Essay> result = essaysService.findAll(page, size, sortBy, direction);
+
+        Page<EssayRespDTO> mapped = result.map((Essay e) -> {
+            List<VoteRespDTO> votes = e.getVotes().stream()
+                    .map(v -> new VoteRespDTO(
+                            v.getId(),
+                            v.getValue(),
+                            (v.getEssay() != null ? v.getEssay().getId() : null),  // essayId
+                            (v.getUser()  != null ? v.getUser().getId()  : null),  // userId
+                            v.getCreatedOn(),
+                            v.getLastUpdated()
+                    ))
+                    .toList();
+
+            return new EssayRespDTO(
+                    e.getId(),
+                    e.getTitle(),
+                    e.getContent(),
+                    e.getCreatedOn(),
+                    e.getLastUpdated(),
+                    (e.getTopic() != null) ? e.getTopic().getId() : null,
+                    (e.getUser()  != null) ? e.getUser().getId()  : null,
+                    votes
+            );
+        });
+
+        return mapped;
     }
 
-    @GetMapping("/{essayId}")
-    public Essay getById(@PathVariable Long essayId) {
-        return this.essaysService.findById(essayId);
+    @GetMapping("/{id}")
+    public EssayRespDTO getById(@PathVariable Long id) {
+        Essay e = essaysService.findById(id);
+
+        List<VoteRespDTO> votes = e.getVotes().stream()
+                .map(v -> new VoteRespDTO(
+                        v.getId(),
+                        v.getValue(),
+                        (v.getEssay() != null ? v.getEssay().getId() : null), // essayId
+                        (v.getUser()  != null ? v.getUser().getId()  : null), // userId
+                        v.getCreatedOn(),
+                        v.getLastUpdated()
+                ))
+                .toList();
+
+        return new EssayRespDTO(
+                e.getId(),
+                e.getTitle(),
+                e.getContent(),
+                e.getCreatedOn(),
+                e.getLastUpdated(),
+                (e.getTopic() != null ? e.getTopic().getId() : null),
+                (e.getUser()  != null ? e.getUser().getId()  : null),
+                votes
+        );
     }
 
     @GetMapping("/by-user/{userId}")
-    public Page<Essay> getAllByUserId(@PathVariable Long userId,
-                                      @RequestParam(defaultValue = "0") int page,
-                                      @RequestParam(defaultValue = "20") int size,
-                                      @RequestParam(defaultValue = "createdOn") String sortBy,
-                                      @RequestParam(defaultValue = "desc") String direction) {
-        return this.essaysService.findAllByUserId(userId, page, size, sortBy, direction);
+    public Page<EssayRespDTO> getAllByUserId(@PathVariable Long userId,
+                                             @RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "20") int size,
+                                             @RequestParam(defaultValue = "createdOn") String sortBy,
+                                             @RequestParam(defaultValue = "desc") String direction) {
+        Page<Essay> result = this.essaysService.findAllByUserId(userId, page, size, sortBy, direction);
+
+        Page<EssayRespDTO> mapped = result.map((Essay e) -> {
+            List<VoteRespDTO> votes = e.getVotes().stream()
+                    .map(v -> new VoteRespDTO(
+                            v.getId(),
+                            v.getValue(),
+                            (v.getEssay() != null ? v.getEssay().getId() : null),
+                            (v.getUser()  != null ? v.getUser().getId()  : null),
+                            v.getCreatedOn(),
+                            v.getLastUpdated()
+                    ))
+                    .toList();
+
+            return new EssayRespDTO(
+                    e.getId(),
+                    e.getTitle(),
+                    e.getContent(),
+                    e.getCreatedOn(),
+                    e.getLastUpdated(),
+                    (e.getTopic() != null ? e.getTopic().getId() : null),
+                    (e.getUser()  != null ? e.getUser().getId()  : null),
+                    votes
+            );
+        });
+
+        return mapped;
     }
 
+
     @GetMapping("/by-topic/{topicId}")
-    public Page<Essay> getAllByTopicId(@PathVariable Long topicId,
-                                       @RequestParam(defaultValue = "0") int page,
-                                       @RequestParam(defaultValue = "20") int size,
-                                       @RequestParam(defaultValue = "createdOn") String sortBy,
-                                       @RequestParam(defaultValue = "desc") String direction) {
-        return this.essaysService.findAllByTopicId(topicId, page, size, sortBy, direction);
+    public Page<EssayRespDTO> getAllByTopicId(@PathVariable Long topicId,
+                                              @RequestParam(defaultValue = "0") int page,
+                                              @RequestParam(defaultValue = "20") int size,
+                                              @RequestParam(defaultValue = "createdOn") String sortBy,
+                                              @RequestParam(defaultValue = "desc") String direction) {
+        Page<Essay> result = this.essaysService.findAllByTopicId(topicId, page, size, sortBy, direction);
+
+        Page<EssayRespDTO> mapped = result.map((Essay e) -> {
+            List<VoteRespDTO> votes = e.getVotes().stream()
+                    .map(v -> new VoteRespDTO(
+                            v.getId(),
+                            v.getValue(),
+                            (v.getEssay() != null ? v.getEssay().getId() : null),
+                            (v.getUser()  != null ? v.getUser().getId()  : null),
+                            v.getCreatedOn(),
+                            v.getLastUpdated()
+                    ))
+                    .toList();
+
+            return new EssayRespDTO(
+                    e.getId(),
+                    e.getTitle(),
+                    e.getContent(),
+                    e.getCreatedOn(),
+                    e.getLastUpdated(),
+                    (e.getTopic() != null ? e.getTopic().getId() : null),
+                    (e.getUser()  != null ? e.getUser().getId()  : null),
+                    votes
+            );
+        });
+
+        return mapped;
     }
 
     @GetMapping("/ordered-by-votes-asc")
-    public Page<Essay> getOrderedByVotesAsc(@RequestParam(defaultValue = "0") int page,
-                                            @RequestParam(defaultValue = "20") int size) {
-        return this.essaysService.findAllOrderByVotesAsc(page, size);
+    public Page<EssayRespDTO> getOrderedByVotesAsc(@RequestParam(defaultValue = "0") int page,
+                                                   @RequestParam(defaultValue = "20") int size) {
+        Page<Essay> result = this.essaysService.findAllOrderByVotesAsc(page, size);
+
+        Page<EssayRespDTO> mapped = result.map((Essay e) -> {
+            List<VoteRespDTO> votes = e.getVotes().stream()
+                    .map(v -> new VoteRespDTO(
+                            v.getId(),
+                            v.getValue(),
+                            (v.getEssay() != null ? v.getEssay().getId() : null),
+                            (v.getUser()  != null ? v.getUser().getId()  : null),
+                            v.getCreatedOn(),
+                            v.getLastUpdated()
+                    ))
+                    .toList();
+
+            return new EssayRespDTO(
+                    e.getId(),
+                    e.getTitle(),
+                    e.getContent(),
+                    e.getCreatedOn(),
+                    e.getLastUpdated(),
+                    (e.getTopic() != null ? e.getTopic().getId() : null),
+                    (e.getUser()  != null ? e.getUser().getId()  : null),
+                    votes
+            );
+        });
+
+        return mapped;
     }
 
     @PostMapping

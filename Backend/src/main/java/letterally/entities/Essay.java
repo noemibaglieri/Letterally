@@ -3,6 +3,7 @@ package letterally.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "essays")
@@ -20,8 +21,7 @@ public class Essay {
     @Column(nullable = false)
     private String title;
 
-    @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @Column(name = "created_on", nullable = false)
@@ -37,6 +37,12 @@ public class Essay {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "essay", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "essay", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Vote> votes;
 
     public Essay(String title, String content, Topic topic, User user) {
         this.title = title.trim();
