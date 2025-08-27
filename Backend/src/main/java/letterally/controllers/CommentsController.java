@@ -89,6 +89,7 @@ public class CommentsController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public CommentRespDTO create(@RequestBody @Validated NewCommentDTO payload,
                                  BindingResult validationResult,
                                  @AuthenticationPrincipal User currentUser) {
@@ -103,8 +104,8 @@ public class CommentsController {
                 created.getId(),
                 created.getContent(),
                 created.getEssay().getId(),
-                created.getUser().getId(),
-                created.getUser().getUsername(),
+                currentUser.getId(),
+                currentUser.getUsername(),
                 created.getCreatedOn()
         );
     }
@@ -132,8 +133,8 @@ public class CommentsController {
                 updated.getId(),
                 updated.getContent(),
                 updated.getEssay().getId(),
-                updated.getUser().getId(),
-                updated.getUser().getUsername(),
+                existing.getUser().getId(),
+                existing.getUser().getUsername(),
                 updated.getCreatedOn()
         );
     }
