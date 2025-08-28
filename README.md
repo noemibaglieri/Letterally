@@ -18,12 +18,14 @@
   * [✨ Features](#-features)
   * [🛠 Tech Stack](#-tech-stack)
   * [📄 API Documentation](#-api-documentation)
+  * [🚀 Future Improvements](#-future-improvements)
 
 * [Versione Italiana](#versione-italiana)
   * [📌 Descrizione](#-descrizione)
   * [✨ Funzionalità](#-funzionalità)
   * [🛠 Stack Tecnologico](#-stack-tecnologico)
   * [📄 Documentazione API](#-documentazione-api)
+  * [🚀 Miglioramenti Futuri](#-miglioramenti-futuri)
 
 ---
 
@@ -76,6 +78,23 @@ Once the app is running, open:
 
 ---
 
+## 🚀 Future Improvements
+
+Here are some ideas and upcoming features planned for **Letterally**:
+
+- **User‑proposed topics** → Allow users to suggest possible weekly topics for admins to review and approve.
+- **AI‑generated topics** → Integrate AI to automatically suggest new weekly topics.
+- **AI‑powered moderation** → Use AI to help detect inappropriate essays and comments, assisting admins in content moderation.
+- **User badges & gamification** → Award badges for top‑voted essays, weekly winners, and active participation.
+- **Email notifications** → Send reminders when new topics are published or when users receive votes/comments.
+- **Comment replies & threads** → Transform the current comment system into a threaded discussion.
+- **User statistics dashboard** → Let users track their votes, submissions, and rankings over time.
+- **Dark mode / UI customization** *(frontend)* → Allow users to personalise the platform visually.
+
+
+---
+
+
 # Versione Italiana
 
 ## 📌 Descrizione
@@ -122,6 +141,21 @@ Gli **admin** possono:
 
 Quando l'app è in esecuzione, apri:  
 🔗 **Swagger UI** → [http://localhost:3001/swagger-ui/index.html](http://localhost:3001/swagger-ui/index.html)
+
+---
+
+## 🚀 Miglioramenti Futuri
+
+Ecco alcune idee e funzionalità future pianificate per **Letterally**:
+
+- **Proposte di topic dagli utenti** → Permettere agli utenti di suggerire possibili argomenti settimanali da approvare dagli admin.
+- **Topic generati con AI** → Integrare un sistema di AI per proporre automaticamente nuovi topic settimanali.
+- **Moderazione automatizzata con AI** → Utilizzare l’AI per rilevare essay e commenti inappropriati, supportando gli admin nella moderazione.
+- **Badge utente e gamification** → Premiare gli utenti con badge per i migliori temi, i vincitori settimanali e la partecipazione attiva.
+- **Notifiche email** → Inviare promemoria quando vengono pubblicati nuovi topic o quando gli utenti ricevono voti/commenti.
+- **Risposte ai commenti e thread** → Trasformare l’attuale sistema di commenti in discussioni nidificate.
+- **Dashboard delle statistiche utente** → Permettere agli utenti di monitorare voti, invii e classifiche nel tempo.
+- **Dark mode / Personalizzazione UI** *(frontend)* → Consentire agli utenti di personalizzare l’aspetto della piattaforma.
 
 ---
 
