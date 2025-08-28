@@ -40,8 +40,8 @@ public class EssaysController {
                     .map(v -> new VoteRespDTO(
                             v.getId(),
                             v.getValue(),
-                            (v.getEssay() != null ? v.getEssay().getId() : null),  // essayId
-                            (v.getUser()  != null ? v.getUser().getId()  : null),  // userId
+                            (v.getEssay() != null ? v.getEssay().getId() : null),
+                            (v.getUser()  != null ? v.getUser().getId()  : null),
                             v.getCreatedOn(),
                             v.getLastUpdated()
                     ))
@@ -193,6 +193,7 @@ public class EssaysController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Essay create(@RequestBody @Validated NewEssayDTO payload,
                         BindingResult validationResult,
                         @AuthenticationPrincipal User currentUser) {
@@ -203,6 +204,8 @@ public class EssaysController {
         if (currentUser == null) {
             throw new BadRequestException("Authentication required");
         }
+
+        Essay created = this.essaysService.save(payload, currentUser);
         return this.essaysService.save(payload, currentUser);
     }
 
