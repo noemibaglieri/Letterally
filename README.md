@@ -14,16 +14,16 @@
 ## 🌍 Table of Contents
 
 * [English Version](#english-version)
-  * [Overview](#overview)
-  * [Features](#features)
-  * [Tech Stack](#tech-stack)
-  * [API Documentation](#api-documentation)
+  * [📌 Overview](#-overview)
+  * [✨ Features](#-features)
+  * [🛠 Tech Stack](#-tech-stack)
+  * [📄 API Documentation](#-api-documentation)
 
 * [Versione Italiana](#versione-italiana)
-  * [Descrizione](#descrizione)
-  * [Funzionalità](#funzionalità)
-  * [Stack Tecnologico](#stack-tecnologico)
-  * [Documentazione API](#documentazione-api)
+  * [📌 Descrizione](#-descrizione)
+  * [✨ Funzionalità](#-funzionalità)
+  * [🛠 Stack Tecnologico](#-stack-tecnologico)
+  * [📄 Documentazione API](#-documentazione-api)
 
 ---
 
