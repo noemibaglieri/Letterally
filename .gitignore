@@ -31,6 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+Frontend/node_modules
 
 env.properties
 Backend/.DS_Store
