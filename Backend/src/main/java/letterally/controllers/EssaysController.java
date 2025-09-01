@@ -4,10 +4,7 @@ import letterally.entities.Essay;
 import letterally.entities.User;
 import letterally.exceptions.BadRequestException;
 import letterally.exceptions.ValidationException;
-import letterally.payloads.EssayRespDTO;
-import letterally.payloads.NewEssayDTO;
-import letterally.payloads.UpdateEssayDTO;
-import letterally.payloads.VoteRespDTO;
+import letterally.payloads.*;
 import letterally.services.EssaysService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -53,8 +50,15 @@ public class EssaysController {
                     e.getContent(),
                     e.getCreatedOn(),
                     e.getLastUpdated(),
-                    (e.getTopic() != null) ? e.getTopic().getId() : null,
-                    (e.getUser()  != null) ? e.getUser().getId()  : null,
+                    (e.getTopic() != null ? e.getTopic().getId() : null),
+                    (e.getUser() != null
+                            ? new UserRespDTO(
+                            e.getUser().getId(),
+                            e.getUser().getUsername(),
+                            e.getUser().getEmail(),
+                            e.getUser().getAvatar()
+                    )
+                            : null),
                     votes
             );
         });
@@ -84,7 +88,14 @@ public class EssaysController {
                 e.getCreatedOn(),
                 e.getLastUpdated(),
                 (e.getTopic() != null ? e.getTopic().getId() : null),
-                (e.getUser()  != null ? e.getUser().getId()  : null),
+                (e.getUser() != null
+                        ? new UserRespDTO(
+                        e.getUser().getId(),
+                        e.getUser().getUsername(),
+                        e.getUser().getEmail(),
+                        e.getUser().getAvatar()
+                )
+                        : null),
                 votes
         );
     }
@@ -116,7 +127,14 @@ public class EssaysController {
                     e.getCreatedOn(),
                     e.getLastUpdated(),
                     (e.getTopic() != null ? e.getTopic().getId() : null),
-                    (e.getUser()  != null ? e.getUser().getId()  : null),
+                    (e.getUser() != null
+                            ? new UserRespDTO(
+                            e.getUser().getId(),
+                            e.getUser().getUsername(),
+                            e.getUser().getEmail(),
+                            e.getUser().getAvatar()
+                    )
+                            : null),
                     votes
             );
         });
@@ -152,7 +170,14 @@ public class EssaysController {
                     e.getCreatedOn(),
                     e.getLastUpdated(),
                     (e.getTopic() != null ? e.getTopic().getId() : null),
-                    (e.getUser()  != null ? e.getUser().getId()  : null),
+                    (e.getUser() != null
+                            ? new UserRespDTO(
+                            e.getUser().getId(),
+                            e.getUser().getUsername(),
+                            e.getUser().getEmail(),
+                            e.getUser().getAvatar()
+                    )
+                            : null),
                     votes
             );
         });
@@ -184,7 +209,14 @@ public class EssaysController {
                     e.getCreatedOn(),
                     e.getLastUpdated(),
                     (e.getTopic() != null ? e.getTopic().getId() : null),
-                    (e.getUser()  != null ? e.getUser().getId()  : null),
+                    (e.getUser() != null
+                            ? new UserRespDTO(
+                            e.getUser().getId(),
+                            e.getUser().getUsername(),
+                            e.getUser().getEmail(),
+                            e.getUser().getAvatar()
+                    )
+                            : null),
                     votes
             );
         });

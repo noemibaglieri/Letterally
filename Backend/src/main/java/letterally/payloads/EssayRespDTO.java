@@ -1,4 +1,6 @@
 package letterally.payloads;
+import letterally.entities.User;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -9,6 +11,6 @@ public record EssayRespDTO(
         LocalDateTime createdOn,
         LocalDateTime lastUpdated,
         Long topicId,
-        Long userId,
+        UserRespDTO user,
         List<VoteRespDTO> votes
 ) {}

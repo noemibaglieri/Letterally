@@ -19,9 +19,10 @@ const LoginPage = () => {
                 </p>
               </div>
             </Col>
-            <Col md={6} className="accent-bg p-5 rounded-end-4 d-flex flex-column justify-content-center align-items-center">
+            <Col md={6} className="bg-white p-5 rounded-end-4 d-flex flex-column justify-content-center align-items-center">
               <div className="text-center mb-5">
-                <h1>Welcome back</h1>
+                <img src="../src/assets/key_icon.png" alt="key icon" width={80} />
+                <h1 className="mt-4">Welcome back</h1>
                 <p className="secondary-very-light">
                   New here? <Link to="/register">Create an account</Link>
                 </p>

@@ -18,10 +18,10 @@ const RegisterPage = () => {
               </p>
             </div>
           </Col>
-          <Col md={6} className="accent-bg p-5 rounded-end-4 d-flex flex-column justify-content-center align-items-center">
+          <Col md={6} className="bg-white p-5 rounded-end-4 d-flex flex-column justify-content-center align-items-center">
             <div className="text-center mb-5">
               <img src="../src/assets/pen_icon.png" alt="pen icon" width={80} />
-              <h1>Create an account</h1>
+              <h1 className="mt-4">Create an account</h1>
               <p className="secondary-very-light">
                 Already have an account? <Link to="/login">Log in</Link>
               </p>

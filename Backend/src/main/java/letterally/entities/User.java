@@ -56,6 +56,8 @@ public class User implements UserDetails {
     @PrePersist
     protected void onCreate() {
         if (this.registeredOn == null) this.registeredOn = LocalDate.now();
+        this.username = this.username.toLowerCase();
+        this.email = this.email.toLowerCase();
     }
 
     @Override
