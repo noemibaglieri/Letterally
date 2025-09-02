@@ -7,4 +7,5 @@ export interface Essay {
   content: string;
   topic?: Topic;
   user?: User;
+  createdOn?: Date;
 }

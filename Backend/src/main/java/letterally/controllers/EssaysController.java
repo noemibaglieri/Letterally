@@ -50,13 +50,31 @@ public class EssaysController {
                     e.getContent(),
                     e.getCreatedOn(),
                     e.getLastUpdated(),
-                    (e.getTopic() != null ? e.getTopic().getId() : null),
+                    e.getTopic() != null
+                            ? new TopicRespDTO(
+                            e.getTopic().getId(),
+                            e.getTopic().getTitle(),
+                            e.getTopic().getDescription(),
+                            e.getTopic().getEndDate().toString(),
+                            e.getTopic().getImage(),
+                            e.getTopic().getCategory() != null
+                                    ? new CategoryRespDTO(
+                                    e.getTopic().getCategory().getId(),
+                                    e.getTopic().getCategory().getName(),
+                                    e.getTopic().getCategory().getColor(),
+                                    e.getTopic().getCategory().getIcon()
+                            )
+                                    : null,
+                            e.getTopic().getCategory() != null ? e.getTopic().getCategory().getId() : null
+                    )
+                            : null,
                     (e.getUser() != null
                             ? new UserRespDTO(
                             e.getUser().getId(),
                             e.getUser().getUsername(),
                             e.getUser().getEmail(),
-                            e.getUser().getAvatar()
+                            e.getUser().getAvatar(),
+                            e.getUser().getRegisteredOn()
                     )
                             : null),
                     votes
@@ -87,13 +105,31 @@ public class EssaysController {
                 e.getContent(),
                 e.getCreatedOn(),
                 e.getLastUpdated(),
-                (e.getTopic() != null ? e.getTopic().getId() : null),
+                e.getTopic() != null
+                        ? new TopicRespDTO(
+                        e.getTopic().getId(),
+                        e.getTopic().getTitle(),
+                        e.getTopic().getDescription(),
+                        e.getTopic().getEndDate().toString(),
+                        e.getTopic().getImage(),
+                        e.getTopic().getCategory() != null
+                                ? new CategoryRespDTO(
+                                e.getTopic().getCategory().getId(),
+                                e.getTopic().getCategory().getName(),
+                                e.getTopic().getCategory().getColor(),
+                                e.getTopic().getCategory().getIcon()
+                        )
+                                : null,
+                        e.getTopic().getCategory() != null ? e.getTopic().getCategory().getId() : null
+                )
+                        : null,
                 (e.getUser() != null
                         ? new UserRespDTO(
                         e.getUser().getId(),
                         e.getUser().getUsername(),
                         e.getUser().getEmail(),
-                        e.getUser().getAvatar()
+                        e.getUser().getAvatar(),
+                        e.getUser().getRegisteredOn()
                 )
                         : null),
                 votes
@@ -126,13 +162,31 @@ public class EssaysController {
                     e.getContent(),
                     e.getCreatedOn(),
                     e.getLastUpdated(),
-                    (e.getTopic() != null ? e.getTopic().getId() : null),
+                    e.getTopic() != null
+                            ? new TopicRespDTO(
+                            e.getTopic().getId(),
+                            e.getTopic().getTitle(),
+                            e.getTopic().getDescription(),
+                            e.getTopic().getEndDate().toString(),
+                            e.getTopic().getImage(),
+                            e.getTopic().getCategory() != null
+                                    ? new CategoryRespDTO(
+                                    e.getTopic().getCategory().getId(),
+                                    e.getTopic().getCategory().getName(),
+                                    e.getTopic().getCategory().getColor(),
+                                    e.getTopic().getCategory().getIcon()
+                            )
+                                    : null,
+                            e.getTopic().getCategory() != null ? e.getTopic().getCategory().getId() : null
+                    )
+                            : null,
                     (e.getUser() != null
                             ? new UserRespDTO(
                             e.getUser().getId(),
                             e.getUser().getUsername(),
                             e.getUser().getEmail(),
-                            e.getUser().getAvatar()
+                            e.getUser().getAvatar(),
+                            e.getUser().getRegisteredOn()
                     )
                             : null),
                     votes
@@ -169,13 +223,31 @@ public class EssaysController {
                     e.getContent(),
                     e.getCreatedOn(),
                     e.getLastUpdated(),
-                    (e.getTopic() != null ? e.getTopic().getId() : null),
+                    e.getTopic() != null
+                            ? new TopicRespDTO(
+                            e.getTopic().getId(),
+                            e.getTopic().getTitle(),
+                            e.getTopic().getDescription(),
+                            e.getTopic().getEndDate().toString(),
+                            e.getTopic().getImage(),
+                            e.getTopic().getCategory() != null
+                                    ? new CategoryRespDTO(
+                                    e.getTopic().getCategory().getId(),
+                                    e.getTopic().getCategory().getName(),
+                                    e.getTopic().getCategory().getColor(),
+                                    e.getTopic().getCategory().getIcon()
+                            )
+                                    : null,
+                            e.getTopic().getCategory() != null ? e.getTopic().getCategory().getId() : null
+                    )
+                            : null,
                     (e.getUser() != null
                             ? new UserRespDTO(
                             e.getUser().getId(),
                             e.getUser().getUsername(),
                             e.getUser().getEmail(),
-                            e.getUser().getAvatar()
+                            e.getUser().getAvatar(),
+                            e.getUser().getRegisteredOn()
                     )
                             : null),
                     votes
@@ -208,13 +280,31 @@ public class EssaysController {
                     e.getContent(),
                     e.getCreatedOn(),
                     e.getLastUpdated(),
-                    (e.getTopic() != null ? e.getTopic().getId() : null),
+                    e.getTopic() != null
+                            ? new TopicRespDTO(
+                            e.getTopic().getId(),
+                            e.getTopic().getTitle(),
+                            e.getTopic().getDescription(),
+                            e.getTopic().getEndDate().toString(),
+                            e.getTopic().getImage(),
+                            e.getTopic().getCategory() != null
+                                    ? new CategoryRespDTO(
+                                    e.getTopic().getCategory().getId(),
+                                    e.getTopic().getCategory().getName(),
+                                    e.getTopic().getCategory().getColor(),
+                                    e.getTopic().getCategory().getIcon()
+                            )
+                                    : null,
+                            e.getTopic().getCategory() != null ? e.getTopic().getCategory().getId() : null
+                    )
+                            : null,
                     (e.getUser() != null
                             ? new UserRespDTO(
                             e.getUser().getId(),
                             e.getUser().getUsername(),
                             e.getUser().getEmail(),
-                            e.getUser().getAvatar()
+                            e.getUser().getAvatar(),
+                            e.getUser().getRegisteredOn()
                     )
                             : null),
                     votes

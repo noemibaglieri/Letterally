@@ -6,4 +6,6 @@ export class Constants {
   static API_TOPIC_ALL: string = "/topics";
   static API_TOPIC_CURRENT: string = "/topics/active";
   static API_ESSAY_BY_ID = (id: number | string): string => `/essays/${id}`;
+  static API_ESSAY_ALL_BY_TOPIC_ID = (id: number | string): string => `/essays/by-topic/${id}`;
+  static API_ESSAY_ALL_BY_USER_ID = (id: number | string): string => `essays/by-user/${id}`;
 }

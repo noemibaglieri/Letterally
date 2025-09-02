@@ -89,7 +89,7 @@ a:hover {
 /* BUTTONS */
 
 .btn-primary {
-  background-image: linear-gradient(92.88deg, var(--secondary-light) 9.16%, var(--secondary) 64.72%) !important;
+  background-image: linear-gradient(92.88deg, #3c3f62 9.16%, var(--secondary) 64.72%) !important;
   border-radius: 8px !important;
   border-style: none !important;
   box-sizing: border-box !important;
@@ -105,6 +105,17 @@ a:hover {
   -webkit-user-select: none !important;
   touch-action: manipulation !important;
   text-transform: uppercase !important;
+}
+
+.btn-outline-primary {
+  border: 2px solid var(--secondary-light) !important;
+  color: var(--secondary-light) !important;
+}
+
+.btn-outline-primary:hover {
+  border: 2px solid var(--secondary-light) !important;
+  background-color: var(--secondary-light) !important;
+  color: white !important;
 }
 
 .btn-primary:hover {
@@ -158,4 +169,49 @@ a:hover {
 
 .custom-gap-1rem {
   column-gap: 1rem;
+}
+
+/* USER CARD */
+.object-cover {
+  object-fit: cover;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+}
+
+/* ESSAY PAGE */
+.image-wrapper {
+  overflow: hidden;
+  position: relative;
+}
+
+.essay-image {
+  width: 100%;
+  height: 25rem !important;
+  object-fit: cover;
+  display: block;
+}
+
+.overlay-title {
+  background: linear-gradient(to top, var(--secondary-light), rgba(0, 0, 0, 0.1) 50%, transparent);
+  color: white;
+  padding: 1.5rem 1rem;
+  font-size: 1.5rem;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: end;
+}
+
+.essay-text {
+  line-height: 2.2rem;
+  font-size: 1.2rem;
+  text-align: justify;
+}
+
+.card-outline {
+  outline: 2px solid var(--secondary-light);
+}
+
+.card-secondary-bg {
+  background-color: var(--secondary) !important;
 }

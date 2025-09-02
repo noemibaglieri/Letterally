@@ -5,7 +5,7 @@ export interface User {
   password?: string;
   dateOfBirth: string;
   avatar?: string;
-  createdAt?: string;
+  registeredOn?: string;
 }
 
 export interface NewUserResponse {
