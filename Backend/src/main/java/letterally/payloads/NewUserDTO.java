@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
+import letterally.entities.Role;
 
 import java.time.LocalDate;
 
@@ -22,5 +23,7 @@ public record NewUserDTO(
         String password,
 
         @Past(message = "Date of birth must be in the past")
-        LocalDate dateOfBirth
+        LocalDate dateOfBirth,
+
+        Role role
 ) {}

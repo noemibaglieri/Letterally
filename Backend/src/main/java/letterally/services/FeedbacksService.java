@@ -1,5 +1,6 @@
 package letterally.services;
 
+import letterally.entities.Comment;
 import letterally.entities.Essay;
 import letterally.entities.Feedback;
 import letterally.entities.User;
@@ -10,7 +11,6 @@ import letterally.payloads.NewFeedbackDTO;
 import letterally.payloads.UpdateFeedbackDTO;
 import letterally.repositories.EssaysRepository;
 import letterally.repositories.FeedbacksRepository;
-import letterally.repositories.TopicsRepository;
 import letterally.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -29,9 +29,6 @@ public class FeedbacksService {
 
     @Autowired
     private UsersRepository usersRepository;
-
-    @Autowired
-    private TopicsRepository topicsRepository;
 
     public Feedback save(NewFeedbackDTO payload, User user) {
 
@@ -77,20 +74,18 @@ public class FeedbacksService {
                 .orElseThrow(() -> new NotFoundException("Feedback id * " + feedbackId + " * not found"));
     }
 
-    public Page<Feedback> findCommentsByEssay(Long essayId, int page, int size, String sortBy, String direction) {
-        Sort sort = direction.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return feedbacksRepository.findByEssay_IdAndContentNotNull(essayId, pageable);
-    }
-
     public Page<Feedback> findAllByEssay(Long essayId, int page, int size, String sortBy, String direction) {
-        Sort sort = direction.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(page, size, sort);
         return feedbacksRepository.findByEssay_Id(essayId, pageable);
     }
 
-    public long countVotes(Long essayId) {
-        return feedbacksRepository.countByEssay_IdAndValueNotNull(essayId);
+    public Page<Feedback> findAllByUser(Long userId, int page, int size, String sortBy, String direction) {
+        Sort sort = direction.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return feedbacksRepository.findByUser_Id(userId, pageable);
     }
 
     public double averageVote(Long essayId) {
@@ -98,9 +93,12 @@ public class FeedbacksService {
         return avg == null ? 0.0 : avg;
     }
 
-    public int myVoteOrZero(Long essayId, Long userId) {
-        return feedbacksRepository.findByUser_IdAndEssay_Id(userId, essayId)
-                .map(f -> f.getValue() == null ? 0 : f.getValue())
-                .orElse(0);
+    public long countByEssay(Long essayId) {
+        return feedbacksRepository.countByEssay_Id(essayId);
+    }
+
+    public double averageByAuthor(Long userId) {
+        Double avg = feedbacksRepository.findAverageByAuthorId(userId);
+        return avg == null ? 0.0 : avg;
     }
 }

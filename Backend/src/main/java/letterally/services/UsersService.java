@@ -92,6 +92,13 @@ public class UsersService {
         this.usersRepository.delete(user);
     }
 
+    public boolean existsByUsername(String username) {
+        return this.usersRepository.existsByUsername((username));
+    }
+
+    public boolean existsByEmail(String email) {
+        return this.usersRepository.existsByEmail((email));
+    }
 
     public List<User> findAll() {
         return this.usersRepository.findAll();
