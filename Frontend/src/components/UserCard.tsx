@@ -1,37 +1,37 @@
-import { Button, Card, Col } from "react-bootstrap";
+import { Card, Col, Row } from "react-bootstrap";
 import type { User } from "../interfaces/User";
 
-const UserCard = (props: User) => {
+const UserCard = (props: { user: User; feedbackCount: number | null; essayCount: number }) => {
   return (
-    <>
-      {console.log(props.registeredOn)}
-      <div className="d-flex flex-column border-0 ">
-        <Card.Body className="d-flex justify-content-between align-items-center">
-          <Col className="me-3">
-            <img className="object-cover rounded-3 card-outline" src={props.avatar} />
-          </Col>
-          <div className="d-flex flex-column">
-            <div>
-              <Card.Title>{props.username}</Card.Title>
-              <Card.Text className="text-muted text-uppercase custom-fs mb-2">
-                {"Member since " + (props.registeredOn ? new Date(props.registeredOn).getFullYear() : "N/A")}
-              </Card.Text>
-            </div>
-            <div className="d-flex gap-3">
-              <div className="d-flex flex-column text-center align-content-center justify-content-center">
-                <p className="fw-5 custom-fs mb-0 text-uppercase text-dark">essays</p>
-                <Card.Text className="mb-0 fw-bold">32</Card.Text>
-              </div>
-              <div className="d-flex flex-column text-center align-content-center justify-content-center">
-                <p className="custom-fs mb-0 text-uppercase">votes</p>
-                <Card.Text className="fw-bold">8.5</Card.Text>
-              </div>
-              <Button variant="outline-primary">View profile</Button>
-            </div>
-          </div>
-        </Card.Body>
+    <Card className="rounded-3 border-0 profile-card position-relative overflow-hidden">
+      <div className="profile-header position-relative">
+        <div className="text-white fw-semibold px-3 py-2">Profile</div>
+
+        <img
+          src={props.user.avatar}
+          alt="user avatar"
+          className="profile-avatar rounded-circle border border-4 border-white position-absolute start-50 translate-middle-x"
+        />
       </div>
-    </>
+
+      <Card.Body className="pt-5 text-center profile-body">
+        <Row className="text-muted small mb-2">
+          <Col className="text-start">
+            <div>Essays</div>
+            <div className="fs-5 text-dark fw-semibold">{props.essayCount}</div>
+          </Col>
+          <Col className="text-end">
+            <div>Avg votes</div>
+            <div className="fs-5 text-dark fw-semibold">{props.feedbackCount}</div>
+          </Col>
+        </Row>
+
+        <div className="fs-4 fw-semibold">{props.user.username}</div>
+        <div className="text-muted custom-fs text-uppercase">
+          {"member since " + (props.user.registeredOn ? new Date(props.user.registeredOn).getFullYear() : "N/A")}
+        </div>
+      </Card.Body>
+    </Card>
   );
 };
 

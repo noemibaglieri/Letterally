@@ -178,7 +178,29 @@ a:hover {
   width: 100%;
 }
 
+.profile-header {
+  height: 110px;
+  background: var(--maing-bg-dark);
+}
+
+.profile-avatar {
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  bottom: -44px;
+  z-index: 2;
+  outline: rgb(255, 255, 255) 4px !important;
+}
+
+.profile-body {
+  padding-top: 56px !important;
+}
+
 /* ESSAY PAGE */
+.last-child:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
 .image-wrapper {
   overflow: hidden;
   position: relative;
@@ -214,4 +236,10 @@ a:hover {
 
 .card-secondary-bg {
   background-color: var(--secondary) !important;
+}
+
+/* FEEDBACK */
+.vote-value {
+  font-size: 2rem !important;
+  font-weight: bold !important;
 }

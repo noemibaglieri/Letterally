@@ -23,7 +23,5 @@ public record NewUserDTO(
         String password,
 
         @Past(message = "Date of birth must be in the past")
-        LocalDate dateOfBirth,
-
-        Role role
+        LocalDate dateOfBirth
 ) {}

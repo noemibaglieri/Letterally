@@ -1,5 +1,7 @@
 package letterally.services;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import letterally.entities.Essay;
 import letterally.entities.Topic;
 import letterally.entities.User;
@@ -16,6 +18,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.util.Map;
+
 @Service
 public class EssaysService {
 
@@ -25,12 +30,32 @@ public class EssaysService {
     @Autowired
     private TopicsRepository topicsRepository;
 
+    @Autowired
+    private Cloudinary cloudinary;
+
     public Essay save(NewEssayDTO payload, User author) {
 
         Topic topic = this.topicsRepository.findById(payload.topicId())
                 .orElseThrow(() -> new NotFoundException("Topic with id * " + payload.topicId() + " * not found"));
 
-        Essay newEssay = new Essay(payload.title().trim(), payload.content().trim(), topic, author);
+        String imageUrl = null;
+
+        if (payload.image() != null && !payload.image().isEmpty()) {
+            try {
+                Map uploadResult = cloudinary.uploader().upload(payload.image().getBytes(), ObjectUtils.emptyMap());
+                imageUrl = (String) uploadResult.get("url");
+            } catch (IOException e) {
+                throw new BadRequestException("Image upload failed");
+            }
+        }
+
+        Essay newEssay = new Essay(
+                payload.title().trim(),
+                payload.content().trim(),
+                imageUrl,
+                topic,
+                author
+        );
 
         return this.essaysRepository.save(newEssay);
     }
@@ -55,7 +80,26 @@ public class EssaysService {
             changed = true;
         }
 
+        if (payload.image() != null && !payload.image().isEmpty()) {
+            try {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> uploadRes = (Map<String, Object>) cloudinary.uploader()
+                        .upload(payload.image().getBytes(), ObjectUtils.emptyMap());
+
+                String uploadedUrl = (String) uploadRes.get("url");
+                if (uploadedUrl == null || uploadedUrl.isBlank()) {
+                    throw new BadRequestException("Image upload failed: empty URL returned");
+                }
+                found.setImage(uploadedUrl);
+                changed = true;
+
+            } catch (IOException ex) {
+                throw new BadRequestException("Image upload failed");
+            }
+        }
+
         if (!changed) return found;
+
         return this.essaysRepository.save(found);
     }
 
@@ -83,7 +127,7 @@ public class EssaysService {
                 ? Sort.by(sortBy).descending()
                 : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        return essaysRepository.findByUser_Id(userId, pageable);
+        return this.essaysRepository.findByUser_Id(userId, pageable);
     }
 
     public Page<Essay> findAllByTopicId(Long topicId, int page, int size, String sortBy, String direction) {
@@ -91,12 +135,14 @@ public class EssaysService {
                 ? Sort.by(sortBy).descending()
                 : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        return essaysRepository.findByTopic_Id(topicId, pageable);
+        return this.essaysRepository.findByTopic_Id(topicId, pageable);
     }
 
     public Page<Essay> findAllOrderByVotesAsc(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return essaysRepository.findAllOrderByVotesAsc(pageable);
+        return this.essaysRepository.findAllOrderByAverageFeedbackAsc(pageable);
     }
-
+    public long countByAuthor(Long userId) {
+        return this.essaysRepository.countByUser_Id(userId);
+    }
 }

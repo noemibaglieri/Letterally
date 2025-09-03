@@ -6,7 +6,7 @@ import logo from "../assets/letterally_nav.png";
 
 const SideBar = () => {
   return (
-    <div className="text-white d-flex flex-column justify-content-between main-bg-dark letterally-sidebar rounded-3 p-3 m-3">
+    <div className="text-white d-flex flex-column justify-content-between main-bg-dark letterally-sidebar rounded-3 p-3 m-3 me-0">
       <div>
         <div className="d-flex flex-column align-items-center gap-2 justify-content-center">
           <img src={logo} width={160} alt="Letterally Logo" />

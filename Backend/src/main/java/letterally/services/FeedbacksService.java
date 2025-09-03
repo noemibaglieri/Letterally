@@ -1,6 +1,5 @@
 package letterally.services;
 
-import letterally.entities.Comment;
 import letterally.entities.Essay;
 import letterally.entities.Feedback;
 import letterally.entities.User;

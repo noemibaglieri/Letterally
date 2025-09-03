@@ -1,8 +1,10 @@
 package letterally.runners;
 
 import letterally.entities.Role;
+import letterally.entities.User;
 import letterally.payloads.NewUserDTO;
 import letterally.repositories.RolesRepository;
+import letterally.repositories.UsersRepository;
 import letterally.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +21,9 @@ public class AdminRunner implements CommandLineRunner {
 
     @Autowired
     private RolesRepository rolesRepository;
+
+    @Autowired
+    private UsersRepository usersRepository;
 
     @Value("${ADMIN_PASSWORD}")
     private String adminPassword;
@@ -60,12 +65,14 @@ public class AdminRunner implements CommandLineRunner {
                 adminUsername,
                 adminEmail,
                 adminPassword,
-                LocalDate.parse("1995-01-14"),
-                adminRole
+                LocalDate.parse("1995-01-14")
         );
 
-        usersService.save(createAdmin);
-        System.out.println(adminUsername + "was created as an Admin!");
+        User created = usersService.save(createAdmin);
+        created.setRole(adminRole);
+
+        usersRepository.save(created);
+        System.out.println(adminUsername + " was created as an Admin!");
     }
 }
 

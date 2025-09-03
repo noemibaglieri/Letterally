@@ -5,7 +5,7 @@ import { useState } from "react";
 const EssayComponent = (props: Essay) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleReadMore = () => setIsExpanded((prev) => !prev);
-  const maxChars = 2400;
+  const maxChars = 1400;
 
   const renderContent = () => {
     if (!props.content) return null;
@@ -41,7 +41,7 @@ const EssayComponent = (props: Essay) => {
               className="essay-image rounded-3"
               src="https://images.pexels.com/photos/33602780/pexels-photo-33602780.jpeg?_gl=1*1ju8mn9*_ga*MTMxMjU0NTA5My4xNzU2NzQzMTU3*_ga_8JE65Q40S6*czE3NTY4MTU2NTYkbzQkZzEkdDE3NTY4MTYxMjEkajQ4JGwwJGgw"
             />
-            <div className="overlay-title position-absolute bottom-0 start-0 p-3">
+            <div className="overlay-title position-absolute bottom-0 start-0 p-3 ps-0">
               <div className="ps-5">
                 <h1 className="m-0 text-white fw-bold">{props.title}</h1>
                 {props.createdOn && (

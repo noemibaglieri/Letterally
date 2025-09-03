@@ -9,6 +9,7 @@ import letterally.services.EssaysService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
@@ -33,16 +34,23 @@ public class EssaysController {
         Page<Essay> result = essaysService.findAll(page, size, sortBy, direction);
 
         Page<EssayRespDTO> mapped = result.map((Essay e) -> {
-            List<VoteRespDTO> votes = e.getVotes().stream()
-                    .map(v -> new VoteRespDTO(
-                            v.getId(),
-                            v.getValue(),
-                            (v.getEssay() != null ? v.getEssay().getId() : null),
-                            (v.getUser()  != null ? v.getUser().getId()  : null),
-                            v.getCreatedOn(),
-                            v.getLastUpdated()
-                    ))
-                    .toList();
+            List<FeedbackRespDTO> feedback = e.getFeedback().stream()
+                    .map(f -> new FeedbackRespDTO(
+                            f.getId(),
+                            f.getValue(),
+                            f.getContent(),
+                            (f.getUser() != null
+                                    ? new UserRespDTO(
+                                    f.getUser().getId(),
+                                    f.getUser().getUsername(),
+                                    f.getUser().getEmail(),
+                                    f.getUser().getAvatar(),
+                                    f.getUser().getRegisteredOn()
+                            )
+                                    : null),
+                            f.getCreatedOn(),
+                            f.getLastUpdated()
+                    )).toList();
 
             return new EssayRespDTO(
                     e.getId(),
@@ -50,12 +58,13 @@ public class EssaysController {
                     e.getContent(),
                     e.getCreatedOn(),
                     e.getLastUpdated(),
+                    e.getImage(),
                     e.getTopic() != null
                             ? new TopicRespDTO(
                             e.getTopic().getId(),
                             e.getTopic().getTitle(),
                             e.getTopic().getDescription(),
-                            e.getTopic().getEndDate().toString(),
+                            e.getTopic().getEndDate() != null ? e.getTopic().getEndDate().toString() : null,
                             e.getTopic().getImage(),
                             e.getTopic().getCategory() != null
                                     ? new CategoryRespDTO(
@@ -77,7 +86,7 @@ public class EssaysController {
                             e.getUser().getRegisteredOn()
                     )
                             : null),
-                    votes
+                    feedback
             );
         });
 
@@ -88,14 +97,22 @@ public class EssaysController {
     public EssayRespDTO getById(@PathVariable Long id) {
         Essay e = essaysService.findById(id);
 
-        List<VoteRespDTO> votes = e.getVotes().stream()
-                .map(v -> new VoteRespDTO(
-                        v.getId(),
-                        v.getValue(),
-                        (v.getEssay() != null ? v.getEssay().getId() : null), // essayId
-                        (v.getUser()  != null ? v.getUser().getId()  : null), // userId
-                        v.getCreatedOn(),
-                        v.getLastUpdated()
+        List<FeedbackRespDTO> feedback = e.getFeedback().stream()
+                .map(f -> new FeedbackRespDTO(
+                        f.getId(),
+                        f.getValue(),
+                        f.getContent(),
+                        (f.getUser() != null
+                                ? new UserRespDTO(
+                                f.getUser().getId(),
+                                f.getUser().getUsername(),
+                                f.getUser().getEmail(),
+                                f.getUser().getAvatar(),
+                                f.getUser().getRegisteredOn()
+                        )
+                                : null),
+                        f.getCreatedOn(),
+                        f.getLastUpdated()
                 ))
                 .toList();
 
@@ -105,6 +122,7 @@ public class EssaysController {
                 e.getContent(),
                 e.getCreatedOn(),
                 e.getLastUpdated(),
+                e.getImage(),
                 e.getTopic() != null
                         ? new TopicRespDTO(
                         e.getTopic().getId(),
@@ -120,7 +138,9 @@ public class EssaysController {
                                 e.getTopic().getCategory().getIcon()
                         )
                                 : null,
-                        e.getTopic().getCategory() != null ? e.getTopic().getCategory().getId() : null
+                        e.getTopic().getCategory() != null
+                                ? e.getTopic().getCategory().getId()
+                                : null
                 )
                         : null,
                 (e.getUser() != null
@@ -132,7 +152,7 @@ public class EssaysController {
                         e.getUser().getRegisteredOn()
                 )
                         : null),
-                votes
+                feedback
         );
     }
 
@@ -144,15 +164,24 @@ public class EssaysController {
                                              @RequestParam(defaultValue = "desc") String direction) {
         Page<Essay> result = this.essaysService.findAllByUserId(userId, page, size, sortBy, direction);
 
-        Page<EssayRespDTO> mapped = result.map((Essay e) -> {
-            List<VoteRespDTO> votes = e.getVotes().stream()
-                    .map(v -> new VoteRespDTO(
-                            v.getId(),
-                            v.getValue(),
-                            (v.getEssay() != null ? v.getEssay().getId() : null),
-                            (v.getUser()  != null ? v.getUser().getId()  : null),
-                            v.getCreatedOn(),
-                            v.getLastUpdated()
+        return result.map((Essay e) -> {
+
+            List<FeedbackRespDTO> feedback = e.getFeedback().stream()
+                    .map(f -> new FeedbackRespDTO(
+                            f.getId(),
+                            f.getValue(),
+                            f.getContent(),
+                            (f.getUser() != null
+                                    ? new UserRespDTO(
+                                    f.getUser().getId(),
+                                    f.getUser().getUsername(),
+                                    f.getUser().getEmail(),
+                                    f.getUser().getAvatar(),
+                                    f.getUser().getRegisteredOn()
+                            )
+                                    : null),
+                            f.getCreatedOn(),
+                            f.getLastUpdated()
                     ))
                     .toList();
 
@@ -162,6 +191,7 @@ public class EssaysController {
                     e.getContent(),
                     e.getCreatedOn(),
                     e.getLastUpdated(),
+                    e.getImage(),
                     e.getTopic() != null
                             ? new TopicRespDTO(
                             e.getTopic().getId(),
@@ -189,13 +219,10 @@ public class EssaysController {
                             e.getUser().getRegisteredOn()
                     )
                             : null),
-                    votes
+                    feedback
             );
         });
-
-        return mapped;
     }
-
 
     @GetMapping("/by-topic/{topicId}")
     public Page<EssayRespDTO> getAllByTopicId(@PathVariable Long topicId,
@@ -205,15 +232,24 @@ public class EssaysController {
                                               @RequestParam(defaultValue = "desc") String direction) {
         Page<Essay> result = this.essaysService.findAllByTopicId(topicId, page, size, sortBy, direction);
 
-        Page<EssayRespDTO> mapped = result.map((Essay e) -> {
-            List<VoteRespDTO> votes = e.getVotes().stream()
-                    .map(v -> new VoteRespDTO(
-                            v.getId(),
-                            v.getValue(),
-                            (v.getEssay() != null ? v.getEssay().getId() : null),
-                            (v.getUser()  != null ? v.getUser().getId()  : null),
-                            v.getCreatedOn(),
-                            v.getLastUpdated()
+        return result.map((Essay e) -> {
+
+            List<FeedbackRespDTO> feedback = e.getFeedback().stream()
+                    .map(f -> new FeedbackRespDTO(
+                            f.getId(),
+                            f.getValue(),
+                            f.getContent(),
+                            (f.getUser() != null
+                                    ? new UserRespDTO(
+                                    f.getUser().getId(),
+                                    f.getUser().getUsername(),
+                                    f.getUser().getEmail(),
+                                    f.getUser().getAvatar(),
+                                    f.getUser().getRegisteredOn()
+                            )
+                                    : null),
+                            f.getCreatedOn(),
+                            f.getLastUpdated()
                     ))
                     .toList();
 
@@ -223,6 +259,7 @@ public class EssaysController {
                     e.getContent(),
                     e.getCreatedOn(),
                     e.getLastUpdated(),
+                    e.getImage(),
                     e.getTopic() != null
                             ? new TopicRespDTO(
                             e.getTopic().getId(),
@@ -250,11 +287,9 @@ public class EssaysController {
                             e.getUser().getRegisteredOn()
                     )
                             : null),
-                    votes
+                    feedback
             );
         });
-
-        return mapped;
     }
 
     @GetMapping("/ordered-by-votes-asc")
@@ -262,15 +297,23 @@ public class EssaysController {
                                                    @RequestParam(defaultValue = "20") int size) {
         Page<Essay> result = this.essaysService.findAllOrderByVotesAsc(page, size);
 
-        Page<EssayRespDTO> mapped = result.map((Essay e) -> {
-            List<VoteRespDTO> votes = e.getVotes().stream()
-                    .map(v -> new VoteRespDTO(
-                            v.getId(),
-                            v.getValue(),
-                            (v.getEssay() != null ? v.getEssay().getId() : null),
-                            (v.getUser()  != null ? v.getUser().getId()  : null),
-                            v.getCreatedOn(),
-                            v.getLastUpdated()
+        return result.map((Essay e) -> {
+            List<FeedbackRespDTO> feedback = e.getFeedback().stream()
+                    .map(f -> new FeedbackRespDTO(
+                            f.getId(),
+                            f.getValue(),
+                            f.getContent(),
+                            (f.getUser() != null
+                                    ? new UserRespDTO(
+                                    f.getUser().getId(),
+                                    f.getUser().getUsername(),
+                                    f.getUser().getEmail(),
+                                    f.getUser().getAvatar(),
+                                    f.getUser().getRegisteredOn()
+                            )
+                                    : null),
+                            f.getCreatedOn(),
+                            f.getLastUpdated()
                     ))
                     .toList();
 
@@ -280,6 +323,7 @@ public class EssaysController {
                     e.getContent(),
                     e.getCreatedOn(),
                     e.getLastUpdated(),
+                    e.getImage(),
                     e.getTopic() != null
                             ? new TopicRespDTO(
                             e.getTopic().getId(),
@@ -307,14 +351,12 @@ public class EssaysController {
                             e.getUser().getRegisteredOn()
                     )
                             : null),
-                    votes
+                    feedback
             );
         });
-
-        return mapped;
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public Essay create(@RequestBody @Validated NewEssayDTO payload,
                         BindingResult validationResult,
@@ -327,13 +369,12 @@ public class EssaysController {
             throw new BadRequestException("Authentication required");
         }
 
-        Essay created = this.essaysService.save(payload, currentUser);
         return this.essaysService.save(payload, currentUser);
     }
 
-    @PatchMapping("/{essayId}")
+    @PatchMapping(value = "/{essayId}", consumes = "multipart/form-data")
     public Essay update(@PathVariable Long essayId,
-                        @RequestBody @Validated UpdateEssayDTO payload,
+                        @Validated @ModelAttribute UpdateEssayDTO payload,
                         BindingResult validationResult,
                         @AuthenticationPrincipal User currentUser) {
         if (validationResult.hasErrors()) {
@@ -372,5 +413,10 @@ public class EssaysController {
         }
 
         this.essaysService.delete(essayId);
+    }
+
+    @GetMapping("/count-by-author/{userId}")
+    public long countByAuthor(@PathVariable Long userId) {
+        return essaysService.countByAuthor(userId);
     }
 }

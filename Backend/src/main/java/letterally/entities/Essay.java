@@ -30,6 +30,9 @@ public class Essay {
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
 
+    @Column(name = "essay_image")
+    private String image;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "topic_id", nullable = false)
     private Topic topic;
@@ -39,14 +42,12 @@ public class Essay {
     private User user;
 
     @OneToMany(mappedBy = "essay", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments;
+    private List<Feedback> feedback;
 
-    @OneToMany(mappedBy = "essay", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Vote> votes;
-
-    public Essay(String title, String content, Topic topic, User user) {
+    public Essay(String title, String content, String image, Topic topic, User user) {
         this.title = title.trim();
         this.content = content.trim();
+        this.image = image.trim();
         this.topic = topic;
         this.user = user;
     }

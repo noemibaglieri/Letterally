@@ -17,7 +17,7 @@ function App() {
           <Route path="/homepage" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/essay" element={<EssayPage />} />
+          <Route path="/essay/:id" element={<EssayPage />} />
         </Routes>
       </BrowserRouter>
       <ToastContainer />

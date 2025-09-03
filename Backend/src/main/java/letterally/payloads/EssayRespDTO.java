@@ -9,7 +9,8 @@ public record EssayRespDTO(
         String content,
         LocalDateTime createdOn,
         LocalDateTime lastUpdated,
+        String image,
         TopicRespDTO topic,
         UserRespDTO user,
-        List<VoteRespDTO> votes
+        List<FeedbackRespDTO> votes
 ) {}

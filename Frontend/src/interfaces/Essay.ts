@@ -1,3 +1,4 @@
+import type { Feedback } from "./Feedback";
 import type { Topic } from "./Topic";
 import type { User } from "./User";
 
@@ -8,4 +9,5 @@ export interface Essay {
   topic?: Topic;
   user?: User;
   createdOn?: Date;
+  votes?: Feedback[];
 }
