@@ -3,6 +3,7 @@ package letterally.controllers;
 import letterally.entities.User;
 import letterally.exceptions.ValidationException;
 import letterally.payloads.UpdateUserDTO;
+import letterally.payloads.UserRespDTO;
 import letterally.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,8 +61,17 @@ public class UsersController {
     }
 
     @GetMapping("/me")
-    public User getOwnProfile(@AuthenticationPrincipal User currentAuthenticatedUser) {
-        return currentAuthenticatedUser;
+    public UserRespDTO getOwnProfile(@AuthenticationPrincipal User currentAuthenticatedUser) {
+        return new UserRespDTO(
+                currentAuthenticatedUser.getId(),
+                currentAuthenticatedUser.getUsername(),
+                currentAuthenticatedUser.getEmail(),
+                currentAuthenticatedUser.getAvatar(),
+                currentAuthenticatedUser.getRegisteredOn(),
+                currentAuthenticatedUser.getRole() != null
+                        ? currentAuthenticatedUser.getRole().getName()
+                        : null
+        );
     }
 
     @PutMapping("/me")

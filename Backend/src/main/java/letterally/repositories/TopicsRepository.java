@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface TopicsRepository extends JpaRepository<Topic, Long> {
-    List<Topic> findByStartDateLessThanEqualAndEndDateGreaterThan(LocalDate startDate, LocalDate endDate);
+    Topic findByStartDateLessThanEqualAndEndDateGreaterThan(LocalDate startDate, LocalDate endDate);
     Page<Topic> findByCategory(Category category, Pageable pageable);
     Page<Topic> findByEndDateBeforeOrStartDateLessThanEqualAndEndDateGreaterThan(
             LocalDate endDate, LocalDate startDate, LocalDate endDate2, Pageable pageable

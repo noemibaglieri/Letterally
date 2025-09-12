@@ -45,7 +45,8 @@ public class EssaysController {
                                     f.getUser().getUsername(),
                                     f.getUser().getEmail(),
                                     f.getUser().getAvatar(),
-                                    f.getUser().getRegisteredOn()
+                                    f.getUser().getRegisteredOn(),
+                                    e.getUser().getRole() != null ? e.getUser().getRole().getName() : null
                             )
                                     : null),
                             f.getCreatedOn(),
@@ -83,8 +84,8 @@ public class EssaysController {
                             e.getUser().getUsername(),
                             e.getUser().getEmail(),
                             e.getUser().getAvatar(),
-                            e.getUser().getRegisteredOn()
-                    )
+                            e.getUser().getRegisteredOn(),
+                            e.getUser().getRole() != null ? e.getUser().getRole().getName() : null )
                             : null),
                     feedback
             );
@@ -108,8 +109,9 @@ public class EssaysController {
                                 f.getUser().getUsername(),
                                 f.getUser().getEmail(),
                                 f.getUser().getAvatar(),
-                                f.getUser().getRegisteredOn()
-                        )
+                                f.getUser().getRegisteredOn(),
+                                e.getUser().getRole() != null ? e.getUser().getRole().getName() : null )
+
                                 : null),
                         f.getCreatedOn(),
                         f.getLastUpdated()
@@ -149,8 +151,9 @@ public class EssaysController {
                         e.getUser().getUsername(),
                         e.getUser().getEmail(),
                         e.getUser().getAvatar(),
-                        e.getUser().getRegisteredOn()
-                )
+                        e.getUser().getRegisteredOn(),
+                        e.getUser().getRole() != null ? e.getUser().getRole().getName() : null )
+
                         : null),
                 feedback
         );
@@ -177,8 +180,9 @@ public class EssaysController {
                                     f.getUser().getUsername(),
                                     f.getUser().getEmail(),
                                     f.getUser().getAvatar(),
-                                    f.getUser().getRegisteredOn()
-                            )
+                                    f.getUser().getRegisteredOn(),
+                                    e.getUser().getRole() != null ? e.getUser().getRole().getName() : null )
+
                                     : null),
                             f.getCreatedOn(),
                             f.getLastUpdated()
@@ -216,8 +220,9 @@ public class EssaysController {
                             e.getUser().getUsername(),
                             e.getUser().getEmail(),
                             e.getUser().getAvatar(),
-                            e.getUser().getRegisteredOn()
-                    )
+                            e.getUser().getRegisteredOn(),
+                            e.getUser().getRole() != null ? e.getUser().getRole().getName() : null )
+
                             : null),
                     feedback
             );
@@ -245,8 +250,8 @@ public class EssaysController {
                                     f.getUser().getUsername(),
                                     f.getUser().getEmail(),
                                     f.getUser().getAvatar(),
-                                    f.getUser().getRegisteredOn()
-                            )
+                                    f.getUser().getRegisteredOn(),
+                                    e.getUser().getRole() != null ? e.getUser().getRole().getName() : null )
                                     : null),
                             f.getCreatedOn(),
                             f.getLastUpdated()
@@ -284,8 +289,9 @@ public class EssaysController {
                             e.getUser().getUsername(),
                             e.getUser().getEmail(),
                             e.getUser().getAvatar(),
-                            e.getUser().getRegisteredOn()
-                    )
+                            e.getUser().getRegisteredOn(),
+                            e.getUser().getRole() != null ? e.getUser().getRole().getName() : null )
+
                             : null),
                     feedback
             );
@@ -309,8 +315,9 @@ public class EssaysController {
                                     f.getUser().getUsername(),
                                     f.getUser().getEmail(),
                                     f.getUser().getAvatar(),
-                                    f.getUser().getRegisteredOn()
-                            )
+                                    f.getUser().getRegisteredOn(),
+                                    e.getUser().getRole() != null ? e.getUser().getRole().getName() : null )
+
                                     : null),
                             f.getCreatedOn(),
                             f.getLastUpdated()
@@ -348,8 +355,8 @@ public class EssaysController {
                             e.getUser().getUsername(),
                             e.getUser().getEmail(),
                             e.getUser().getAvatar(),
-                            e.getUser().getRegisteredOn()
-                    )
+                            e.getUser().getRegisteredOn(),
+                            e.getUser().getRole() != null ? e.getUser().getRole().getName() : null )
                             : null),
                     feedback
             );
@@ -358,7 +365,7 @@ public class EssaysController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public Essay create(@RequestBody @Validated NewEssayDTO payload,
+    public Essay create(@ModelAttribute @Validated NewEssayDTO payload,
                         BindingResult validationResult,
                         @AuthenticationPrincipal User currentUser) {
         if (validationResult.hasErrors()) {
@@ -372,7 +379,7 @@ public class EssaysController {
         return this.essaysService.save(payload, currentUser);
     }
 
-    @PatchMapping(value = "/{essayId}", consumes = "multipart/form-data")
+    @PutMapping(value = "/{essayId}", consumes = "multipart/form-data")
     public Essay update(@PathVariable Long essayId,
                         @Validated @ModelAttribute UpdateEssayDTO payload,
                         BindingResult validationResult,
@@ -418,5 +425,10 @@ public class EssaysController {
     @GetMapping("/count-by-author/{userId}")
     public long countByAuthor(@PathVariable Long userId) {
         return essaysService.countByAuthor(userId);
+    }
+
+    @GetMapping("/by-category/{categoryId}")
+    public ExampleEssayDTO getExampleByCategory(@PathVariable Long categoryId) {
+        return essaysService.getExampleByCategory(categoryId);
     }
 }

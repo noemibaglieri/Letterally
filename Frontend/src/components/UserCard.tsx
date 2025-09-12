@@ -1,7 +1,7 @@
 import { Card, Col, Row } from "react-bootstrap";
 import type { User } from "../interfaces/User";
 
-const UserCard = (props: { user: User; feedbackCount: number | null; essayCount: number }) => {
+const UserCard = (props: { user: User; feedbackCount: number | null; essayCount: number | null }) => {
   return (
     <Card className="rounded-3 border-0 profile-card position-relative overflow-hidden">
       <div className="profile-header position-relative">
@@ -13,7 +13,6 @@ const UserCard = (props: { user: User; feedbackCount: number | null; essayCount:
           className="profile-avatar rounded-circle border border-4 border-white position-absolute start-50 translate-middle-x"
         />
       </div>
-
       <Card.Body className="pt-5 text-center profile-body">
         <Row className="text-muted small mb-2">
           <Col className="text-start">
@@ -22,7 +21,7 @@ const UserCard = (props: { user: User; feedbackCount: number | null; essayCount:
           </Col>
           <Col className="text-end">
             <div>Avg votes</div>
-            <div className="fs-5 text-dark fw-semibold">{props.feedbackCount}</div>
+            <div className="fs-5 text-dark fw-semibold">{props.feedbackCount?.toFixed(1)}</div>
           </Col>
         </Row>
 

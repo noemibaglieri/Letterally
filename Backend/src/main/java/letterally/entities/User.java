@@ -17,7 +17,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @ToString(exclude = "password")
-@JsonIgnoreProperties({"password", "role", "authorities", "enabled", "accountNonExpired", "credentialsNonExpired", "accountNonLocked"})
+@JsonIgnoreProperties({"password", "role", "hibernateLazyInitializer","handler",
+        "authorities", "enabled", "accountNonExpired", "credentialsNonExpired", "accountNonLocked"})
 public class User implements UserDetails {
 
     @Id

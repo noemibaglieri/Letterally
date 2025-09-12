@@ -2,13 +2,14 @@ package letterally.services;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import letterally.entities.Category;
 import letterally.entities.Essay;
 import letterally.entities.Topic;
 import letterally.entities.User;
 import letterally.exceptions.BadRequestException;
 import letterally.exceptions.NotFoundException;
-import letterally.payloads.NewEssayDTO;
-import letterally.payloads.UpdateEssayDTO;
+import letterally.payloads.*;
+import letterally.repositories.CategoriesRepository;
 import letterally.repositories.EssaysRepository;
 import letterally.repositories.TopicsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class EssaysService {
 
     @Autowired
     private TopicsRepository topicsRepository;
+
+    @Autowired
+    private CategoriesRepository categoriesRepository;
 
     @Autowired
     private Cloudinary cloudinary;
@@ -144,5 +148,56 @@ public class EssaysService {
     }
     public long countByAuthor(Long userId) {
         return this.essaysRepository.countByUser_Id(userId);
+    }
+
+    public ExampleEssayDTO getExampleByCategory(Long categoryId) {
+        Essay e = essaysRepository
+                .findTopByTopic_Category_IdOrderByCreatedOnDesc(categoryId)
+                .orElseThrow(() -> new NotFoundException("No essay found for category id " + categoryId));
+
+        TopicRespDTO topicDTO = null;
+        if (e.getTopic() != null) {
+            CategoryRespDTO catDTO = null;
+            if (e.getTopic().getCategory() != null) {
+                catDTO = new CategoryRespDTO(
+                        e.getTopic().getCategory().getId(),
+                        e.getTopic().getCategory().getName(),
+                        e.getTopic().getCategory().getColor(),
+                        e.getTopic().getCategory().getIcon()
+                );
+            }
+
+            topicDTO = new TopicRespDTO(
+                    e.getTopic().getId(),
+                    e.getTopic().getTitle(),
+                    e.getTopic().getDescription(),
+                    e.getTopic().getEndDate() != null ? e.getTopic().getEndDate().toString() : null,
+                    e.getTopic().getImage(),
+                    catDTO,
+                    e.getTopic().getCategory() != null ? e.getTopic().getCategory().getId() : null
+            );
+        }
+
+        UserRespDTO userDTO = null;
+        if (e.getUser() != null) {
+            userDTO = new UserRespDTO(
+                    e.getUser().getId(),
+                    e.getUser().getUsername(),
+                    e.getUser().getEmail(),
+                    e.getUser().getAvatar(),
+                    e.getUser().getRegisteredOn(),
+                    e.getUser().getRole() != null ? e.getUser().getRole().getName() : null
+            );
+        }
+
+        return new ExampleEssayDTO(
+                e.getId(),
+                e.getTitle(),
+                e.getContent(),
+                e.getCreatedOn(),
+                e.getImage(),
+                topicDTO,
+                userDTO
+        );
     }
 }

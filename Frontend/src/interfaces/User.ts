@@ -6,6 +6,7 @@ export interface User {
   dateOfBirth: string;
   avatar?: string;
   registeredOn?: string;
+  roleName?: string;
 }
 
 export interface NewUserResponse {

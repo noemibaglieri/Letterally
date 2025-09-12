@@ -81,7 +81,7 @@ public class TopicsService {
                 .orElseThrow(() -> new NotFoundException("Topic id * " + id + " * not found"));
     }
 
-    public List<Topic> findActiveTopics(LocalDate today) {
+    public Topic findActiveTopic(LocalDate today) {
         return this.topicsRepository.findByStartDateLessThanEqualAndEndDateGreaterThan(today, today);
     }
 

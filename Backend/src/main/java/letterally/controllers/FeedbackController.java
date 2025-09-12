@@ -42,8 +42,9 @@ public class FeedbackController {
                                 f.getUser().getUsername(),
                                 f.getUser().getEmail(),
                                 f.getUser().getAvatar(),
-                                f.getUser().getRegisteredOn()
-                        ),
+                                f.getUser().getRegisteredOn(),
+                                f.getUser().getRole() != null ? f.getUser().getRole().getName() : null )
+                        ,
                         f.getCreatedOn(),
                         f.getLastUpdated()
                 ));
@@ -65,8 +66,9 @@ public class FeedbackController {
                                 f.getUser().getUsername(),
                                 f.getUser().getEmail(),
                                 f.getUser().getAvatar(),
-                                f.getUser().getRegisteredOn()
-                        ),
+                                f.getUser().getRegisteredOn(),
+                                f.getUser().getRole() != null ? f.getUser().getRole().getName() : null )
+                        ,
                         f.getCreatedOn(),
                         f.getLastUpdated()
                 ));
@@ -93,8 +95,9 @@ public class FeedbackController {
                         created.getUser().getUsername(),
                         created.getUser().getEmail(),
                         created.getUser().getAvatar(),
-                        created.getUser().getRegisteredOn()
-                ),
+                        created.getUser().getRegisteredOn(),
+                        created.getUser().getRole() != null ? created.getUser().getRole().getName() : null )
+                ,
                 created.getCreatedOn(),
                 created.getLastUpdated()
         );
@@ -126,8 +129,9 @@ public class FeedbackController {
                         updated.getUser().getUsername(),
                         updated.getUser().getEmail(),
                         updated.getUser().getAvatar(),
-                        updated.getUser().getRegisteredOn()
-                ),
+                        updated.getUser().getRegisteredOn(),
+                        updated.getUser().getRole() != null ? updated.getUser().getRole().getName() : null )
+                ,
                 updated.getCreatedOn(),
                 updated.getLastUpdated()
         );
@@ -147,11 +151,9 @@ public class FeedbackController {
         this.feedbacksService.delete(feedbackId);
     }
 
-    @GetMapping("/by-essay/{essayId}/stats")
-    public Map<String, Object> statsByEssay(@PathVariable Long essayId) {
-        long count = feedbacksService.countByEssay(essayId);
-        double avg = feedbacksService.averageVote(essayId);
-        return Map.of("count", count, "average", avg);
+    @GetMapping("/avg-by-essay/{essayId}")
+    public double averageByEssay(@PathVariable Long essayId) {
+    return feedbacksService.averageVote(essayId);
     }
 
     @GetMapping("/avg-by-author/{userId}")

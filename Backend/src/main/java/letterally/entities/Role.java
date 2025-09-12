@@ -1,5 +1,6 @@
 package letterally.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,6 +13,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @ToString(exclude = "users")
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 public class Role {
 
     @Id

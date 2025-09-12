@@ -69,8 +69,8 @@ public class TopicsController {
     }
 
     @GetMapping("/active")
-    public List<Topic> getActive() {
-        return this.topicsService.findActiveTopics(LocalDate.now());
+    public Topic getActive() {
+        return this.topicsService.findActiveTopic(LocalDate.now());
     }
 
     @GetMapping("/category/{categoryId}")

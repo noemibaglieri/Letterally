@@ -7,7 +7,7 @@ const FeedbackCard = (props: Feedback) => {
       <div className="d-flex justify-content-between">
         <div className="d-flex flex-column gap-3">
           <div className="d-flex gap-3">
-            <img className="rounded-3" src={props.user.avatar} alt="user avatar" />
+            <img className="image-max-avatar" src={props.user.avatar} alt="user avatar" />
             <div className="fs-4 ">
               <p className="mb-0 fw-semibold">{props.user.username}</p>
               <p className="text-muted text-uppercase custom-fs mb-0 ">

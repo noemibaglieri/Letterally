@@ -25,8 +25,8 @@ const HomePage = () => {
     const response = await topicService.getActiveTopic();
     console.log(response);
 
-    if (response!.length > 0) {
-      setActiveTopic(response![0]);
+    if (response) {
+      setActiveTopic(response);
     } else {
       setActiveTopic(null);
     }

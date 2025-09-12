@@ -14,6 +14,7 @@ import type { Feedback } from "../interfaces/Feedback";
 import FeedbackCard from "./FeedbackCard";
 import FeedbackForm from "./FeedbackForm";
 import { FeedbackService } from "../services/feedback.service";
+import { StorageService } from "../services/storage.service";
 
 const EssayPage = () => {
   const [essay, setEssay] = useState<Essay | null>(null);
@@ -23,24 +24,17 @@ const EssayPage = () => {
   const [essaysByTopicId, setEssaysByTopicId] = useState<Essay[]>([]);
   const [essaysByUserId, setEssaysByUserId] = useState<Essay[]>([]);
   const [avgVotes, setAvgVotes] = useState<number | null>(null);
+  const [essayAvgVotes, setEssayAvgVotes] = useState<number | null>(null);
   const [essayCount, setEssayCount] = useState<number | null>(null);
 
-  // const [comment, setComment] = useState("");
-  //const [vote, setVote] = useState<number | "">("");
   const params = useParams();
+
+  const currentUser = StorageService.getUser();
+  let isOwner: boolean | null = false;
 
   const essayService = new EssayService();
   const feedbackService = new FeedbackService();
 
-  /*const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    console.log("Submitted comment:", comment);
-    console.log("Submitted vote:", vote);
-    setComment("");
-    setVote("");
-  };
-*/
   const getById = async () => {
     const response = await essayService.getById(parseInt(params.id!));
 
@@ -49,7 +43,7 @@ const EssayPage = () => {
       setUser(response.user!);
       setTopic(response.topic!);
       setFeedback(response.votes!);
-      console.log(response.votes);
+      isOwner = currentUser && currentUser.id === response?.user?.id;
     } else {
       setEssay(null);
     }
@@ -58,7 +52,7 @@ const EssayPage = () => {
   const getAllEssaysByTopicId = async () => {
     const response = await essayService.getAllByTopicId(essay!.topic!.id!);
     if (response) {
-      const filtered = response.filter((e): e is Essay => e !== null);
+      const filtered = response.filter((e): e is Essay => e !== null && e.user?.id !== essay?.user?.id);
       setEssaysByTopicId(filtered);
     } else {
       setEssaysByTopicId([]);
@@ -83,6 +77,14 @@ const EssayPage = () => {
     }
   };
 
+  const getOverallAvgEssayVotes = async () => {
+    const response = await feedbackService.getAvgByEssay(essay!.id!);
+    console.log(response);
+    if (response || response == 0) {
+      setEssayAvgVotes(response!);
+    }
+  };
+
   const countAllEssaysByUser = async () => {
     const response = await essayService.countAllEssaysByUser(essay!.user!.id!);
 
@@ -91,17 +93,22 @@ const EssayPage = () => {
     }
   };
 
-  // const getEssayAvgVotes;
+  const addFeedback = (newFeedback: Feedback) => {
+    const newFeedbackList = [...feedback, newFeedback];
+    setFeedback(newFeedbackList);
+  };
 
   useEffect(() => {
     getById();
-  }, []);
+  }, [params]);
 
   useEffect(() => {
     if (essay === null) return;
+
     getAllEssaysByTopicId();
     getAllEssaysByUserId();
     getOverallAvgVotes();
+    getOverallAvgEssayVotes();
     countAllEssaysByUser();
   }, [essay]);
 
@@ -109,26 +116,27 @@ const EssayPage = () => {
     <>
       <div className="d-flex">
         <SideBar />
-        <div className="mt-3 mb-3 w-100">
-          <Row className="mx-0 gy-4">
+        <div className="mt-3 mb-3 w-100 overflow-custom overflow-hidden rounded-3">
+          <Row className="mx-auto gy-4">
             <Col md={3} className="p-0">
-              <Row className="mx-3 gy-4">
-                <Col md={12} className="p-0">
+              <Row className="mx-auto gy-4">
+                <Col md={12} className="px-3">
                   <h6 className="text-uppercase custom-fs">The author</h6>
+
                   <div className="rounded-3 bg-white">
                     {user ? <UserCard {...{ user: user, feedbackCount: avgVotes, essayCount: essayCount }} /> : <p>Loading user...</p>}
                   </div>
                 </Col>
-                <Col md={12} className="p-0">
+                <Col md={12} className="px-3">
                   <h6 className="text-uppercase custom-fs">More essays by this author</h6>
                   {essaysByUserId.length > 0 ? (
                     essaysByUserId.map((essay) => (
-                      <div key={essay.id} className="p-3 rounded-3 last-child secondary-bg text-white">
-                        <EssayCard {...essay} />
+                      <div key={essay.id} className={`rounded-3 last-child secondary-bg text-white ${essay.id === Number(params.id) ? "active-essay" : ""}`}>
+                        {essay ? <EssayCard {...essay} /> : <p className="fst-italic">This author hasn't written any more essays, yet</p>}
                       </div>
                     ))
                   ) : (
-                    <div className="p-3 rounded-3 last-child secondary-bg text-white">
+                    <div className="px-3 rounded-3 last-child secondary-bg text-white">
                       <p className="fst-italic">This author hasn't written any more essays, yet</p>
                     </div>
                   )}
@@ -136,12 +144,14 @@ const EssayPage = () => {
               </Row>
             </Col>
             <Col md={6} className="p-0">
-              <Row className="mx-0 gy-4">
-                <Col md={12} className="p-0">
+              <Row className="mx-auto gy-4 overflow-custom-child">
+                <Col md={12} className="px-0">
                   <h6 className="text-uppercase custom-fs">The essay</h6>
-                  <div className="rounded-3 bg-white essay-text">{essay ? <EssayComponent {...essay} /> : <p>Loading essay...</p>}</div>
+                  <div className="rounded-3 bg-white essay-text">
+                    {essay ? <EssayComponent {...{ essay: essay, feedbackCount: essayAvgVotes, isOwner: isOwner }} /> : <p>Loading essay...</p>}
+                  </div>
                 </Col>
-                <Col md={12} className="p-0">
+                <Col md={12} className="px-0">
                   <div>
                     <h6 className="text-uppercase custom-fs">Thoughts from readers</h6>
                     {feedback.length > 0 ? (
@@ -160,23 +170,30 @@ const EssayPage = () => {
                 <Col md={12} className="p-0">
                   <div>
                     <h6 className="text-uppercase custom-fs">Leave a comment</h6>
-                    <FeedbackForm />
+                    <FeedbackForm
+                      {...{
+                        essayId: essay?.id,
+                        onPost(feedback) {
+                          addFeedback(feedback);
+                        },
+                      }}
+                    />
                   </div>
                 </Col>
               </Row>
             </Col>
-            <Col md={3} className="p-0">
-              <Row className="mx-3 gy-4">
-                <Col md={12} className="p-0">
+            <Col md={3} className="p-0 overflow-custom">
+              <Row className="mx-auto gy-4 overflow-custom-child">
+                <Col md={12} className="px-3">
                   <h6 className="text-uppercase custom-fs">The topic</h6>
                   <div className="rounded-3 main-bg-dark text-white p-3">{topic ? <TopicComponent {...topic} /> : <p>Loading topic...</p>}</div>
                 </Col>
-                <Col md={12} className="p-0">
+                <Col md={12} className="px-3">
                   <h6 className="text-uppercase custom-fs">More essays on this topic</h6>
                   {essaysByTopicId.length > 0 ? (
                     essaysByTopicId.map((essay) => (
-                      <div key={essay.id} className="p-3 rounded-3 bg-white last-child">
-                        <EssayCard {...essay} />
+                      <div key={essay.id} className="rounded-3 bg-white last-child">
+                        {essay ? <EssayCard {...essay} /> : <p className="text-muted fst-italic">There aren't any more essays on this topic, yet.</p>}
                       </div>
                     ))
                   ) : (

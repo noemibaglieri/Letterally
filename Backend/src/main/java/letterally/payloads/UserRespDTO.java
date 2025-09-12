@@ -1,5 +1,7 @@
 package letterally.payloads;
 
+import letterally.entities.Role;
+
 import java.time.LocalDate;
 
 public record UserRespDTO(
@@ -7,5 +9,6 @@ public record UserRespDTO(
         String username,
         String email,
         String avatar,
-        LocalDate registeredOn
+        LocalDate registeredOn,
+        String roleName
 ) {}

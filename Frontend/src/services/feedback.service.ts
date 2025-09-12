@@ -41,4 +41,43 @@ export class FeedbackService {
       return result;
     }
   }
+
+  async getAvgByEssay(id: number): Promise<number | null> {
+    const response = await fetch(`${Constants.API_URL}${Constants.API_FEEDBACK_AVG_BY_ESSAY_ID(id)}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + StorageService.getToken(),
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      toast.error(errorData.message || "Failed to retrieve average rating by essay");
+      return null;
+    } else {
+      const result = await response.json();
+      return result;
+    }
+  }
+
+  async postFeedback(essayId: number, value: number, content: string): Promise<Feedback | null> {
+    const response = await fetch(`${Constants.API_URL}${Constants.API_FEEDBACK_SEND}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + StorageService.getToken(),
+      },
+      body: JSON.stringify({ essayId, value, content }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      toast.error(errorData.message || "Comment failed to send");
+      return null;
+    } else {
+      const result = await response.json();
+      return result;
+    }
+  }
 }

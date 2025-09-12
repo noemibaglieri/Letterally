@@ -74,6 +74,7 @@ public class JWTCheckerFilter extends OncePerRequestFilter {
                 || m.match("/swagger-ui.html", uri)
                 || m.match("/swagger-ui/**", uri)
                 || m.match("/auth/**", uri)
-                || m.match("/error", uri);
+                || m.match("/error", uri)
+                || m.match("/essays/by-category/**", uri);
     }
 }

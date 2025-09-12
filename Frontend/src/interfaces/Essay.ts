@@ -6,8 +6,23 @@ export interface Essay {
   id?: number;
   title: string;
   content: string;
+  imageFile?: string;
   topic?: Topic;
   user?: User;
   createdOn?: Date;
   votes?: Feedback[];
 }
+
+export interface CreateEssayPayload {
+  title: string;
+  content: string;
+  imageFile: File;
+  topicId: number;
+}
+
+export type UpdateEssayPayload = {
+  title: string;
+  content: string;
+  topicId: number;
+  imageFile?: File;
+};
