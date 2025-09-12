@@ -1,26 +1,21 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { Badge, Button, Card, Col, Container, Nav, Row, Tab } from "react-bootstrap";
+import { Button, Card, Col, Container, Nav, Row, Tab } from "react-bootstrap";
 import TopNavBar from "./TopNavBar";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import FooterComponent from "./FooterComponent";
 import type { Essay } from "../interfaces/Essay";
 import type { User } from "../interfaces/User";
 import { EssayService } from "../services/essay.service";
-import type { Topic } from "../interfaces/Topic";
 import type { Category } from "../interfaces/Category";
 import { CategoryService } from "../services/category.service";
-import TopicComponent from "./TopicComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 const LandingPage = () => {
   const [essay, setEssay] = useState<Essay | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const [topic, setTopic] = useState<Topic | null>(null);
-  const [category, setCategory] = useState<Category | undefined>(undefined);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-  const [exampleEssay, setExampleEssay] = useState<Essay | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const essayService = new EssayService();
   const categoryService = new CategoryService();
@@ -32,8 +27,6 @@ const LandingPage = () => {
     if (response) {
       setEssay(response);
       setUser(response.user!);
-      setTopic(response.topic!);
-      setCategory(response.topic!.category);
     } else {
       setEssay(null);
     }
@@ -57,7 +50,6 @@ const LandingPage = () => {
     if (response) {
       setEssay(response);
       setUser(response.user!);
-      setTopic(response.topic!);
     } else {
       setEssay(null);
     }
