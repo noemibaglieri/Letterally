@@ -9,6 +9,10 @@ export class StorageService {
     return localStorage.getItem("authToken")!;
   }
 
+  static removeToken(): void {
+    localStorage.removeItem("authToken");
+  }
+
   static saveUser(user: User): void {
     localStorage.setItem("user", JSON.stringify(user));
   }
@@ -20,5 +24,9 @@ export class StorageService {
     } else {
       return null;
     }
+  }
+
+  static removeUser(): void {
+    localStorage.removeItem("user");
   }
 }

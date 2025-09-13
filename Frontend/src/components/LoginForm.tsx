@@ -45,7 +45,7 @@ const LoginForm = () => {
           setLoading(false);
 
           setTimeout(() => {
-            navigate("/");
+            navigate("/homepage");
           }, 1000);
         }, 2000);
       } else {
