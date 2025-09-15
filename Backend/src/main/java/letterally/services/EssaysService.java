@@ -20,6 +20,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -148,6 +151,26 @@ public class EssaysService {
     }
     public long countByAuthor(Long userId) {
         return this.essaysRepository.countByUser_Id(userId);
+    }
+
+
+    public Page<Essay> findNotVotedByUser(Long userId, int page, int size, String sortBy, String direction) {
+        Sort sort = direction.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return essaysRepository.findNotVotedByUser(userId, pageable);
+    }
+
+    public List<Essay> getTop3MostVotedThisWeek() {
+        LocalDate today = LocalDate.now();
+
+        LocalDate startOfWeek = today.with(java.time.DayOfWeek.MONDAY);
+        LocalDate endOfWeek = today.with(java.time.DayOfWeek.SUNDAY);
+
+        LocalDateTime start = startOfWeek.atStartOfDay();
+        LocalDateTime end = endOfWeek.atTime(23, 59, 59);
+
+        return essaysRepository.findTop3MostVotedThisWeek(start, end, PageRequest.of(0, 3));
     }
 
     public ExampleEssayDTO getExampleByCategory(Long categoryId) {

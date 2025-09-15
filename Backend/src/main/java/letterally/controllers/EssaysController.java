@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -181,7 +182,7 @@ public class EssaysController {
                                     f.getUser().getEmail(),
                                     f.getUser().getAvatar(),
                                     f.getUser().getRegisteredOn(),
-                                    e.getUser().getRole() != null ? e.getUser().getRole().getName() : null )
+                                    f.getUser().getRole() != null ? f.getUser().getRole().getName() : null )
 
                                     : null),
                             f.getCreatedOn(),
@@ -227,6 +228,17 @@ public class EssaysController {
                     feedback
             );
         });
+    }
+
+    @GetMapping("/mine")
+    public Page<EssayRespDTO> getMine(
+            @AuthenticationPrincipal User me,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "createdOn") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction
+    ) {
+        return getAllByUserId(me.getId(), page, size, sortBy, direction);
     }
 
     @GetMapping("/by-topic/{topicId}")
@@ -430,5 +442,102 @@ public class EssaysController {
     @GetMapping("/by-category/{categoryId}")
     public ExampleEssayDTO getExampleByCategory(@PathVariable Long categoryId) {
         return essaysService.getExampleByCategory(categoryId);
+    }
+
+
+    @GetMapping("/not-voted")
+    public Page<EssayRespDTO> getNotVoted(
+            @AuthenticationPrincipal User currentUser,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdOn") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction) {
+
+        if (currentUser == null) {
+            throw new BadRequestException("Authentication required");
+        }
+
+        Page<Essay> result = essaysService.findNotVotedByUser(currentUser.getId(), page, size, sortBy, direction);
+
+        return result.map(e -> new EssayRespDTO(
+                e.getId(),
+                e.getTitle(),
+                e.getContent(),
+                e.getCreatedOn(),
+                e.getLastUpdated(),
+                e.getImage(),
+                e.getTopic() != null
+                        ? new TopicRespDTO(
+                        e.getTopic().getId(),
+                        e.getTopic().getTitle(),
+                        e.getTopic().getDescription(),
+                        e.getTopic().getEndDate() != null ? e.getTopic().getEndDate().toString() : null,
+                        e.getTopic().getImage(),
+                        e.getTopic().getCategory() != null
+                                ? new CategoryRespDTO(
+                                e.getTopic().getCategory().getId(),
+                                e.getTopic().getCategory().getName(),
+                                e.getTopic().getCategory().getColor(),
+                                e.getTopic().getCategory().getIcon()
+                        )
+                                : null,
+                        e.getTopic().getCategory() != null ? e.getTopic().getCategory().getId() : null
+                )
+                        : null,
+                e.getUser() != null
+                        ? new UserRespDTO(
+                        e.getUser().getId(),
+                        e.getUser().getUsername(),
+                        e.getUser().getEmail(),
+                        e.getUser().getAvatar(),
+                        e.getUser().getRegisteredOn(),
+                        e.getUser().getRole() != null ? e.getUser().getRole().getName() : null
+                )
+                        : null,
+                Collections.emptyList()
+        ));
+    }
+    @GetMapping("/top-week")
+    public List<EssayRespDTO> getTopEssaysOfWeek() {
+        return essaysService.getTop3MostVotedThisWeek()
+                .stream()
+                .map(e -> new EssayRespDTO(
+                        e.getId(),
+                        e.getTitle(),
+                        e.getContent(),
+                        e.getCreatedOn(),
+                        e.getLastUpdated(),
+                        e.getImage(),
+                        e.getTopic() != null
+                                ? new TopicRespDTO(
+                                e.getTopic().getId(),
+                                e.getTopic().getTitle(),
+                                e.getTopic().getDescription(),
+                                e.getTopic().getEndDate().toString(),
+                                e.getTopic().getImage(),
+                                e.getTopic().getCategory() != null
+                                        ? new CategoryRespDTO(
+                                        e.getTopic().getCategory().getId(),
+                                        e.getTopic().getCategory().getName(),
+                                        e.getTopic().getCategory().getColor(),
+                                        e.getTopic().getCategory().getIcon()
+                                )
+                                        : null,
+                                e.getTopic().getCategory() != null ? e.getTopic().getCategory().getId() : null
+                        )
+                                : null,
+                        e.getUser() != null
+                                ? new UserRespDTO(
+                                e.getUser().getId(),
+                                e.getUser().getUsername(),
+                                e.getUser().getEmail(),
+                                e.getUser().getAvatar(),
+                                e.getUser().getRegisteredOn(),
+                                e.getUser().getRole() != null ? e.getUser().getRole().getName() : null
+                        )
+                                : null,
+                        Collections.emptyList()
+                ))
+                .toList();
     }
 }
