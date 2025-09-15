@@ -1,6 +1,6 @@
 // src/components/WritingPage.tsx
 import { useEffect, useMemo, useState } from "react";
-import { Button, Col, Form, Row, Spinner, Toast, ToastContainer } from "react-bootstrap";
+import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
 import SideBar from "./SideBar";
 import TopicComponent from "./TopicComponent";
 import { EssayService } from "../services/essay.service";
@@ -235,7 +235,6 @@ const WritingPage = () => {
               </Col>
             </Row>
           </Col>
-          <FooterComponent />
         </Row>
       </div>
     </div>

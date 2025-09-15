@@ -8,6 +8,9 @@ export class Constants {
   static API_TOPIC_CURRENT: string = "/topics/active";
   static API_TOPIC_BY_ID = (id: number | string): string => `/topics/${id}`;
   static API_ESSAY: string = "/essays";
+  static API_ESSAY_MINE = (page: number, size: number | string): string => `/essays/mine?page=${page}&size=${size}`;
+  static API_ESSAY_YET_TO_FEEDBACK = (page: number, size: number | string): string => `/essays/not-voted?page=${page}&size=${size}`;
+  static API_ESSAY_WEEKLY_TOP3: string = "/essays/top-week";
   static API_ESSAY_BY_ID = (id: number | string): string => `/essays/${id}`;
   static API_ESSAY_ALL_BY_TOPIC_ID = (id: number | string): string => `/essays/by-topic/${id}`;
   static API_ESSAY_ALL_BY_USER_ID = (id: number | string): string => `/essays/by-user/${id}`;

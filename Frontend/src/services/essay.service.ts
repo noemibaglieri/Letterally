@@ -1,7 +1,8 @@
 import { toast } from "react-toastify";
 import { Constants } from "../constants";
-import type { CreateEssayPayload, Essay, UpdateEssayPayload } from "../interfaces/Essay";
+import type { CreateEssayPayload, Essay, EssayResponse, UpdateEssayPayload } from "../interfaces/Essay";
 import { StorageService } from "./storage.service";
+import type { PageResponse } from "../interfaces/Types";
 
 export class EssayService {
   async getById(id: number): Promise<Essay | null> {
@@ -27,7 +28,7 @@ export class EssayService {
     const response = await fetch(`${Constants.API_URL}${Constants.API_ESSAY_LAST_BY_CATEGORY(id)}`, {
       method: "GET",
       headers: {
-        "Content-Type": "application-json",
+        "Content-Type": "application/json",
         Authorization: "Bearer " + StorageService.getToken(),
       },
     });
@@ -97,6 +98,60 @@ export class EssayService {
     }
   }
 
+  async getAllOwnEssays(page: number, size: number): Promise<PageResponse<EssayResponse> | null> {
+    const response = await fetch(`${Constants.API_URL}${Constants.API_ESSAY_MINE(page, size)}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + StorageService.getToken(),
+      },
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      toast.error(errorData.message || "Failed to retrieve essays");
+      return null;
+    } else {
+      const result = await response.json();
+      return result;
+    }
+  }
+
+  async getAllYetToFeedback(page: number, size: number): Promise<PageResponse<EssayResponse> | null> {
+    const response = await fetch(`${Constants.API_URL}${Constants.API_ESSAY_YET_TO_FEEDBACK(page, size)}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + StorageService.getToken(),
+      },
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      toast.error(errorData.message || "Failed to retrieve essays");
+      return null;
+    } else {
+      const result = await response.json();
+      return result;
+    }
+  }
+
+  async getTop3Weekly(): Promise<(EssayResponse | null)[]> {
+    const response = await fetch(`${Constants.API_URL}${Constants.API_ESSAY_WEEKLY_TOP3}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + StorageService.getToken(),
+      },
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      toast.error(errorData.message || "Failed to retrieve essays");
+      return [];
+    } else {
+      const result = await response.json();
+      return result;
+    }
+  }
+
   async create(payload: CreateEssayPayload): Promise<Essay | null> {
     const formData = new FormData();
     formData.append("title", payload.title);
@@ -148,5 +203,27 @@ export class EssayService {
       const result = await response.json();
       return result;
     }
+  }
+
+  async delete(id: number): Promise<boolean> {
+    const response = await fetch(`${Constants.API_URL}${Constants.API_ESSAY}/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + StorageService.getToken(),
+      },
+    });
+
+    if (!response.ok) {
+      try {
+        const errorData = await response.json();
+        toast.error(errorData.message || "Failed to delete essay");
+      } catch {
+        toast.error("Failed to delete essay");
+      }
+      return false;
+    }
+
+    toast.success("Essay deleted successfully");
+    return true;
   }
 }

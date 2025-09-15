@@ -1,12 +1,12 @@
 import { Button, Card } from "react-bootstrap";
-import type { Essay } from "../interfaces/Essay";
+import type { EssayResponse } from "../interfaces/Essay";
 import { useEffect, useState } from "react";
 import { StorageService } from "../services/storage.service";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 
-const EssayComponent = (props: { essay: Essay; feedbackCount: number | null }) => {
+const EssayComponent = (props: { essay: EssayResponse; feedbackCount: number | null }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -51,10 +51,7 @@ const EssayComponent = (props: { essay: Essay; feedbackCount: number | null }) =
       <div className="d-flex flex-column rounded-3">
         <Card className="border-0 rounded-3 position-relative overflow-hidden essay-card">
           <div className="image-wrapper position-relative">
-            <img
-              className="essay-image rounded-3"
-              src="https://images.pexels.com/photos/33602780/pexels-photo-33602780.jpeg?_gl=1*1ju8mn9*_ga*MTMxMjU0NTA5My4xNzU2NzQzMTU3*_ga_8JE65Q40S6*czE3NTY4MTU2NTYkbzQkZzEkdDE3NTY4MTYxMjEkajQ4JGwwJGgw"
-            />
+            <img className="essay-image rounded-3" src={props.essay.image} />
             <div className="overlay-title position-absolute bottom-0 start-0 p-3 ps-0">
               <div className="ps-5 d-flex justify-content-between">
                 <div>

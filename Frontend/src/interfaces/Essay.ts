@@ -26,3 +26,14 @@ export type UpdateEssayPayload = {
   topicId: number;
   imageFile?: File;
 };
+
+export type EssayResponse = {
+  id?: number;
+  title: string;
+  content: string;
+  image: string;
+  topic?: Topic;
+  user?: User;
+  createdOn?: Date;
+  votes?: Feedback[];
+};

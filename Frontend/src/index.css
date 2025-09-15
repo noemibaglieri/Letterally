@@ -265,11 +265,6 @@ a:hover {
   background-color: var(--secondary) !important;
 }
 
-.badge-dynamic {
-  color: #fff !important;
-  background-color: var(--dynamic-color, #ccc) !important;
-}
-
 .image-max-avatar {
   border-radius: 500px;
   width: 58px !important;
@@ -377,4 +372,19 @@ a:hover {
 
 .neg-margin {
   margin-top: -160px;
+}
+
+.custom-card-overlay {
+  background: rgba(0, 0, 0, 0.1) 50%;
+  object-fit: cover;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.essay-card-max-height {
+  max-height: 200px;
+}
+.essay-image-max-height {
+  height: 100px;
+  object-fit: cover;
 }
