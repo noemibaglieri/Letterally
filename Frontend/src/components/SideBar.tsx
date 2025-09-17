@@ -92,7 +92,7 @@ const SideBar = () => {
 
       <div>
         {loggingOut && <p className="text-white small mt-2">Logging out...</p>}
-        <div className="d-flex p-3 gap-2 align-items-center">
+        <div className="d-flex sidebar-link gap-2 align-items-center">
           <img src={user?.avatar} alt="logged in user avatar" width={30} style={{ borderRadius: "50%" }} />
           <p className="mb-0 text-capitalize">{user?.username}</p>
           <Badge pill className="admin-color">

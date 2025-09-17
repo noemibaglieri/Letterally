@@ -17,3 +17,11 @@ export interface CreateTopicPayload {
   categoryId: number;
   image: File;
 }
+
+export type UpdateTopicPayload = {
+  title: string;
+  description: string;
+  startDate: string;
+  categoryId: number;
+  image?: File;
+};

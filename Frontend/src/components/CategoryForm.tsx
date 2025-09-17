@@ -39,55 +39,59 @@ const CategoryForm = () => {
       await res.json();
       toast.success("Category created!");
 
-      // reset
       setName("");
       setColor("#6c757d");
       setIcon("book");
-    } catch (err: any) {
-      toast.error(err.message || "Something went wrong");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : typeof err === "string" ? err : "Something went wrong";
+      toast.error(message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Card className="shadow-sm border-0 rounded-3 p-4">
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3">
-          <Form.Label>Name</Form.Label>
-          <Form.Control type="text" placeholder="Enter category name" value={name} onChange={(e) => setName(e.target.value)} required />
-        </Form.Group>
+    <Card className="shadow-sm border-0 rounded-3 p-4 flex-grow-1 h-100 w-100 justify-content-between">
+      <div className="d-flex flex-column">
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3">
+            <Form.Label>Name</Form.Label>
+            <Form.Control type="text" placeholder="Enter category name" value={name} onChange={(e) => setName(e.target.value)} required />
+          </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Color</Form.Label>
-          <Form.Control type="color" value={color} onChange={(e) => setColor(e.target.value)} title="Pick a color" />
-        </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Color</Form.Label>
+            <Form.Control type="color" value={color} onChange={(e) => setColor(e.target.value)} title="Pick a color" />
+          </Form.Group>
 
-        <Form.Group className="mb-2">
-          <Form.Label>Icon (FontAwesome)</Form.Label>
-          <Form.Control type="text" placeholder="e.g. book, flask, brain" value={icon} onChange={(e) => setIcon(e.target.value)} />
-          <Form.Text className="text-muted">
-            Use the icon name without <code>fa-</code> (e.g. <code>book</code>). You can browse all available icons on the{" "}
-            <a href="https://fontawesome.com/icons" target="_blank" rel="noopener noreferrer">
-              FontAwesome website
-            </a>
-            .
-          </Form.Text>
-        </Form.Group>
+          <Form.Group className="mb-2">
+            <Form.Label>Icon (FontAwesome)</Form.Label>
+            <Form.Control type="text" placeholder="e.g. book, flask, brain" value={icon} onChange={(e) => setIcon(e.target.value)} />
+            <Form.Text className="text-muted custom-fs">
+              Use the icon name without <code>fa-</code> (e.g. <code>book</code>).{" "}
+              <p>
+                You can browse all available icons on the{" "}
+                <a href="https://fontawesome.com/icons" target="_blank" rel="noopener noreferrer">
+                  FontAwesome website
+                </a>
+                .
+              </p>
+            </Form.Text>
+          </Form.Group>
 
-        {/* Preview */}
-        <div className="d-flex align-items-center gap-2 mt-2 mb-3">
-          <span className="small text-muted">Preview:</span>
-          <span className="badge d-inline-flex align-items-center gap-2" style={{ backgroundColor: color }}>
-            <i className={`fa-solid fa-${icon}`} />
-            {name || "Category name"}
-          </span>
-        </div>
-
-        <Button type="submit" variant="info" disabled={loading}>
-          {loading ? <Spinner animation="border" size="sm" /> : "Create category"}
-        </Button>
-      </Form>
+          {/* Preview */}
+          <div className="d-flex align-items-center gap-2 mt-2 mb-3">
+            <span className="small text-muted">Preview:</span>
+            <span className="badge d-inline-flex align-items-center gap-2" style={{ backgroundColor: color }}>
+              <i className={`fa-solid fa-${icon}`} />
+              {name || "Category name"}
+            </span>
+          </div>
+        </Form>
+      </div>
+      <Button className="align-self-start fw-bold" type="submit" variant="info" disabled={loading}>
+        {loading ? <Spinner animation="border" size="sm" /> : "Create category"}
+      </Button>
     </Card>
   );
 };

@@ -7,14 +7,16 @@ import { TopicService } from "../services/topic.service";
 import { useEffect, useState } from "react";
 import type { Topic } from "../interfaces/Topic";
 import SortedTopic from "./SortedTopic";
-import { useNavigate } from "react-router-dom";
+import ConfirmDeleteModal from "./ConfirmDeleteModal";
 
 const BackofficePage = () => {
   const [upcoming, setUpcoming] = useState<Topic[]>([]);
   const [past, setPast] = useState<Topic[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingTopic, setEditingTopic] = useState<Topic | null>(null);
   const topicService = new TopicService();
-  const navigate = useNavigate();
+  const [modalTopic, setModalTopic] = useState<Topic | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const loadTopics = async () => {
     try {
@@ -37,24 +39,47 @@ const BackofficePage = () => {
     }
   };
 
+  const askDelete = (id: number) => {
+    const t = [...upcoming, ...past].find((x) => x.id === id) || null;
+    setModalTopic(t);
+  };
+
+  const confirmDelete = async () => {
+    if (!modalTopic?.id) return;
+    setDeleting(true);
+    const ok = await topicService.delete(modalTopic.id);
+    setDeleting(false);
+    if (ok) {
+      setModalTopic(null);
+      await loadTopics();
+    }
+  };
   useEffect(() => {
     loadTopics();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className="d-flex rounded-3">
       <SideBar />
       <div className="mt-3 mb-3 w-100 overflow-custom overflow-scroll rounded-3 let-max-height">
-        <Row className="mx-2 gx-3 gy-3 rounded-3">
+        <Row className="mx-2 gx-3 gy-3 rounded-3 align-items-stretch">
           <Col md={6}>
             <h6 className="text-uppercase custom-fs">Create new topic</h6>
             <Row className="mx-auto gap-3">
-              <TopicForm />
+              <TopicForm
+                editingTopic={editingTopic}
+                onSaved={() => {
+                  setEditingTopic(null);
+                  loadTopics();
+                }}
+                onCancelEdit={() => setEditingTopic(null)}
+              />
             </Row>
           </Col>
-          <Col md={6}>
+          <Col md={6} className="d-flex flex-column">
             <h6 className="text-uppercase custom-fs">Create new category</h6>
-            <Row className="mx-auto gap-3">
+            <Row className="mx-auto gap-3 h-100 w-100">
               <CategoryForm />
             </Row>
           </Col>
@@ -68,7 +93,14 @@ const BackofficePage = () => {
               ) : (
                 upcoming.map((t) => (
                   <Col md={6} key={t.id}>
-                    <SortedTopic topic={t} />
+                    <SortedTopic
+                      topic={t}
+                      onEdit={(id) => {
+                        const topicToEdit = upcoming.find((x) => x.id === id) || past.find((x) => x.id === id);
+                        if (topicToEdit) setEditingTopic(topicToEdit);
+                      }}
+                      onDelete={askDelete}
+                    />
                   </Col>
                 ))
               )}
@@ -87,11 +119,11 @@ const BackofficePage = () => {
                   <Col md={6} key={t.id}>
                     <SortedTopic
                       topic={t}
-                      onEdit={(id) => navigate(`/backoffice/topics/${id}/edit`)}
-                      onDelete={async (id) => {
-                        await topicService.delete(id);
-                        await loadTopics();
+                      onEdit={(id) => {
+                        const topicToEdit = upcoming.find((x) => x.id === id) || past.find((x) => x.id === id);
+                        if (topicToEdit) setEditingTopic(topicToEdit);
                       }}
+                      onDelete={askDelete}
                     />
                   </Col>
                 ))
@@ -100,6 +132,13 @@ const BackofficePage = () => {
           </Col>
         </Row>
       </div>
+      <ConfirmDeleteModal
+        show={!!modalTopic}
+        message={`Are you sure you want to delete the topic "${modalTopic?.title}"?\nThis will also delete all its essays.`}
+        onCancel={() => setModalTopic(null)}
+        onConfirm={confirmDelete}
+        confirming={deleting}
+      />
     </div>
   );
 };

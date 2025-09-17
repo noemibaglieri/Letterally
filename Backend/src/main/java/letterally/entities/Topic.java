@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "topics")
@@ -12,7 +14,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @ToString
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler", "essays"})
 public class Topic {
 
     @Id
@@ -40,6 +42,10 @@ public class Topic {
     private LocalDate createdOn;
 
     private String image;
+
+    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    private List<Essay> essays = new ArrayList<>();
 
     public Topic(String title, String description, LocalDate startDate, Category category, String image) {
         this.title = title.trim();

@@ -417,3 +417,9 @@ a:hover {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+.modal-backdrop.show {
+  opacity: 0.5 !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
