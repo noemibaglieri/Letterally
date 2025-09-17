@@ -186,7 +186,7 @@ const EssayPage = () => {
               <Row className="mx-auto gy-4 overflow-custom-child">
                 <Col md={12} className="px-3">
                   <h6 className="text-uppercase custom-fs">The topic</h6>
-                  <div className="rounded-3 main-bg-dark text-white p-3">{topic ? <TopicComponent {...topic} /> : <p>Loading topic...</p>}</div>
+                  <div className="rounded-3 main-bg-dark text-white">{topic ? <TopicComponent {...topic} /> : <p>Loading topic...</p>}</div>
                 </Col>
                 <Col md={12} className="px-3">
                   <h6 className="text-uppercase custom-fs">More essays on this topic</h6>

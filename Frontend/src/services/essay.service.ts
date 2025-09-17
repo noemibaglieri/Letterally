@@ -116,6 +116,13 @@ export class EssayService {
     }
   }
 
+  async getMyEssayIdForTopic(topicId: number): Promise<number | null> {
+    const page = await this.getAllOwnEssays(0, 100);
+    if (!page) return null;
+    const match = page.content.find((e: EssayResponse) => e.topic?.id === topicId);
+    return match ? match.id! : null;
+  }
+
   async getAllYetToFeedback(page: number, size: number): Promise<PageResponse<EssayResponse> | null> {
     const response = await fetch(`${Constants.API_URL}${Constants.API_ESSAY_YET_TO_FEEDBACK(page, size)}`, {
       method: "GET",
@@ -225,5 +232,28 @@ export class EssayService {
 
     toast.success("Essay deleted successfully");
     return true;
+  }
+
+  async hasWrittenForTopic(topicId: number): Promise<boolean> {
+    const response = await fetch(`${Constants.API_URL}${Constants.API_ESSAY_EXISTS_BY_TOPIC(topicId)}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + StorageService.getToken(),
+      },
+    });
+
+    if (!response.ok) {
+      try {
+        const err = await response.json();
+        toast.error(err.message || "Failed to check essay existence");
+      } catch {
+        toast.error("Failed to check essay existence");
+      }
+      return false;
+    }
+
+    const result: boolean = await response.json();
+    return result;
   }
 }

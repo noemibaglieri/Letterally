@@ -53,5 +53,7 @@ public interface EssaysRepository extends JpaRepository<Essay, Long> {
             @Param("endOfWeek") LocalDateTime endOfWeek,
             Pageable pageable
     );
+
+    boolean existsByUserIdAndTopicId(Long userId, Long topicId);
 }
 

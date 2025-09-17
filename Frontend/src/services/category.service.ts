@@ -20,4 +20,21 @@ export class CategoryService {
       return result;
     }
   }
+
+  async create(category: Category): Promise<Category | null> {
+    const response = await fetch(`${Constants.API_URL}${Constants.API_CATEGORY}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(category),
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      toast.error(errorData.message || "Failed to create category");
+      return null;
+    } else {
+      return response.json();
+    }
+  }
 }

@@ -223,4 +223,8 @@ public class EssaysService {
                 userDTO
         );
     }
+
+    public boolean hasCurrentUserWrittenForTopic(User currentUser, long topicId) {
+        return essaysRepository.existsByUserIdAndTopicId(currentUser.getId(), topicId);
+    }
 }

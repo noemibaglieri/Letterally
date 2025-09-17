@@ -1,7 +1,11 @@
 package letterally.controllers;
 
+import letterally.entities.Essay;
 import letterally.entities.Topic;
 import letterally.entities.User;
+import letterally.exceptions.BadRequestException;
+import letterally.exceptions.ValidationException;
+import letterally.payloads.NewEssayDTO;
 import letterally.payloads.NewTopicDTO;
 import letterally.payloads.UpdateTopicDTO;
 import letterally.services.TopicsService;
@@ -11,8 +15,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,9 +33,20 @@ public class TopicsController {
     @Autowired
     private TopicsService topicsService;
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Topic create(@RequestBody @Validated NewTopicDTO payload) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Topic create(@ModelAttribute @Validated NewTopicDTO payload,
+                        BindingResult validationResult,
+                        @AuthenticationPrincipal User currentUser) {
+        if (validationResult.hasErrors()) {
+            throw new ValidationException(validationResult.getFieldErrors()
+                    .stream().map(e -> e.getDefaultMessage()).toList());
+        }
+        if (currentUser == null) {
+            throw new BadRequestException("Authentication required");
+        }
+
         return this.topicsService.save(payload);
     }
 

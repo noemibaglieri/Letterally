@@ -12,6 +12,7 @@ export class Constants {
   static API_ESSAY_YET_TO_FEEDBACK = (page: number, size: number | string): string => `/essays/not-voted?page=${page}&size=${size}`;
   static API_ESSAY_WEEKLY_TOP3: string = "/essays/top-week";
   static API_ESSAY_BY_ID = (id: number | string): string => `/essays/${id}`;
+  static API_ESSAY_EXISTS_BY_TOPIC = (id: number | string): string => `/essays/exists-by-topic/${id}`;
   static API_ESSAY_ALL_BY_TOPIC_ID = (id: number | string): string => `/essays/by-topic/${id}`;
   static API_ESSAY_ALL_BY_USER_ID = (id: number | string): string => `/essays/by-user/${id}`;
   static API_ESSAY_LAST_BY_CATEGORY = (id: number | string): string => `/essays/by-category/${id}`;

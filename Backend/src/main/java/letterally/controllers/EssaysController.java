@@ -540,4 +540,10 @@ public class EssaysController {
                 ))
                 .toList();
     }
+
+    @GetMapping("/exists-by-topic/{topicId}")
+    public boolean hasWrittenEssayForTopic(@PathVariable Long topicId,
+                                           @AuthenticationPrincipal User currentUser) {
+        return essaysService.hasCurrentUserWrittenForTopic(currentUser, topicId);
+    }
 }

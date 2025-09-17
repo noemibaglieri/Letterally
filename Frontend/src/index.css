@@ -14,6 +14,7 @@ body,
   --secondary-very-light: #a7a7a7af;
   --main-bg-light: #ececfc;
   --maing-bg-dark: #0d1023;
+  --admin-color: #30d7d7;
 }
 
 * {
@@ -22,6 +23,23 @@ body,
 
 body {
   background-color: var(--main-bg-light) !important;
+}
+
+p,
+h3,
+h4,
+h5,
+h6,
+button,
+.btn,
+div {
+  font-family: "Montserrat", sans-serif !important;
+}
+
+h1,
+h2 {
+  font-family: "Lora", serif !important;
+  font-weight: 700;
 }
 
 a {
@@ -52,6 +70,10 @@ a:hover {
 
 .main-bg-dark {
   background-color: var(--maing-bg-dark) !important;
+}
+
+.admin-color {
+  background-color: var(--admin-color) !important;
 }
 
 .primary {
@@ -387,4 +409,11 @@ a:hover {
 .essay-image-max-height {
   height: 100px;
   object-fit: cover;
+}
+
+.clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
