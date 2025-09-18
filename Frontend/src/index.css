@@ -1,4 +1,3 @@
-/* una volta sola, global */
 html,
 body,
 #root {
@@ -339,12 +338,6 @@ a:hover {
   box-shadow: none !important;
   text-transform: none !important;
 }
-/*.overflow-custom {
-  max-height: calc(100vh - 2rem);
-}
-.overflow-custom-child {
-  overflow-y: scroll;
-}*/
 
 .let-max-height {
   height: calc(100vh - 2rem) !important;

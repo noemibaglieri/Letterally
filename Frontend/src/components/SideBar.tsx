@@ -38,6 +38,7 @@ const SideBar = () => {
 
   useEffect(() => {
     getLoggedUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

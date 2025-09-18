@@ -64,6 +64,7 @@ const LandingPage = () => {
     }*/
     getAllCategories();
     getExampleEssay();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -177,7 +178,7 @@ const LandingPage = () => {
                       categories.slice(0, 4).map((category, index) => {
                         return (
                           <Nav.Item>
-                            <Nav.Link eventKey={index} onClick={() => handleCategoryClick(category.id)}>
+                            <Nav.Link eventKey={index} onClick={() => handleCategoryClick(category!.id!)}>
                               {category?.name}
                             </Nav.Link>
                           </Nav.Item>

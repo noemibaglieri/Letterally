@@ -68,6 +68,10 @@ public class FeedbacksService {
         this.feedbacksRepository.delete(f);
     }
 
+    public Page<Feedback> findAll(Pageable pageable) {
+        return feedbacksRepository.findAll(pageable);
+    }
+
     public Feedback findById(Long feedbackId) {
         return feedbacksRepository.findById(feedbackId)
                 .orElseThrow(() -> new NotFoundException("Feedback id * " + feedbackId + " * not found"));

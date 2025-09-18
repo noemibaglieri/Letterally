@@ -256,4 +256,20 @@ export class EssayService {
     const result: boolean = await response.json();
     return result;
   }
+
+  async getAll(page = 0, size = 50): Promise<PageResponse<EssayResponse> | null> {
+    const res = await fetch(`${Constants.API_URL}${Constants.API_ESSAY_PAGE(page, size)}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + StorageService.getToken(),
+      },
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      toast.error(err.message || "Failed to retrieve essays");
+      return null;
+    }
+    return res.json();
+  }
 }

@@ -2,8 +2,27 @@ import { toast } from "react-toastify";
 import { Constants } from "../constants";
 import type { Feedback } from "../interfaces/Feedback";
 import { StorageService } from "./storage.service";
+import type { PageResponse } from "../interfaces/Types";
 
 export class FeedbackService {
+  async getAll(page = 0, size = 50): Promise<PageResponse<Feedback> | null> {
+    const response = await fetch(`${Constants.API_URL}${Constants.API_FEEDBACK_PAGE(page, size)}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + StorageService.getToken(),
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      toast.error(errorData.message || "Failed to retrieve comments");
+      return null;
+    } else {
+      const result = await response.json();
+      return result;
+    }
+  }
+
   async getAllByUserId(id: number): Promise<(Feedback | null)[]> {
     const response = await fetch(`${Constants.API_URL}${Constants.API_FEEDBACK_ALL_BY_USER_ID(id)}`, {
       method: "GET",
@@ -79,5 +98,20 @@ export class FeedbackService {
       const result = await response.json();
       return result;
     }
+  }
+
+  async delete(id: number): Promise<boolean> {
+    const response = await fetch(`${Constants.API_URL}${Constants.API_FEEDBACK_BY_ID(id)}`, {
+      method: "DELETE",
+      headers: { Authorization: "Bearer " + StorageService.getToken() },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      toast.error(errorData.message || "Failed to delete comment");
+      return false;
+    }
+    toast.success("Comment deleted");
+    return true;
   }
 }

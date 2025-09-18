@@ -9,6 +9,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import EssayPage from "./components/EssayPage";
 import WritingPage from "./components/WritingPage";
 import BackofficePage from "./components/BackofficePage";
+import ModerationPage from "./components/ModerationPage";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/edit/:topicId/essay/:essayId" element={<WritingPage />} />
           <Route path="/create/:topicId/essay" element={<WritingPage />} />
           <Route path="/backoffice" element={<BackofficePage />} />
+          <Route path="/moderation" element={<ModerationPage />} />
         </Routes>
       </BrowserRouter>
       <ToastContainer />

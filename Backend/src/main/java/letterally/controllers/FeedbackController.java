@@ -11,7 +11,11 @@ import letterally.payloads.UserRespDTO;
 import letterally.services.FeedbacksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -25,6 +29,38 @@ public class FeedbackController {
 
     @Autowired
     private FeedbacksService feedbacksService;
+
+    @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Page<FeedbackRespDTO> getAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "createdOn") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction
+    ) {
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        return feedbacksService.findAll(pageable)
+                .map(f -> new FeedbackRespDTO(
+                        f.getId(),
+                        f.getValue(),
+                        f.getContent(),
+                        new UserRespDTO(
+                                f.getUser().getId(),
+                                f.getUser().getUsername(),
+                                f.getUser().getEmail(),
+                                f.getUser().getAvatar(),
+                                f.getUser().getRegisteredOn(),
+                                f.getUser().getRole() != null ? f.getUser().getRole().getName() : null
+                        ),
+                        f.getCreatedOn(),
+                        f.getLastUpdated()
+                ));
+    }
 
     @GetMapping("/by-essay/{essayId}")
     public Page<FeedbackRespDTO> getAllByEssay(@PathVariable Long essayId,
