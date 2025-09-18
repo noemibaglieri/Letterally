@@ -40,6 +40,7 @@ const TopicComponent = (props: Topic) => {
     return () => {
       isMounted = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onHomepage, props.id]);
 
   return (
@@ -67,11 +68,12 @@ const TopicComponent = (props: Topic) => {
         </Card>
       </Col>
       {location.pathname === "/homepage" && props.endDate && (
-        <Col className="secondary-bg p-3 rounded-3 text-white">
-          <h4>Until next topic</h4>
-          <div className="mt-2 fw-bold">
+        <Col className=" position-relative secondary-bg p-3 d-flex flex-column gap-3 text-center justify-content-center aligh-items-center rounded-3 text-white">
+          <div className="bg-pattern"></div>
+          <div className="mt-2 fw-bold d-flex justify-content-center align-items-center">
             <Countdown targetDate={props.endDate} />
           </div>
+          <h5 className="mb-0 fw-semibold">Until next topic!</h5>
         </Col>
       )}
     </>
