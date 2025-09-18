@@ -1,0 +1,29 @@
+export class Constants {
+  static API_URL: string = "http://localhost:3001";
+  static API_AUTH_REGISTER: string = "/auth/register";
+  static API_AUTH_LOGIN: string = "/auth/login";
+  static API_USER_ME: string = "/users/me";
+  static API_CATEGORY: string = "/categories";
+  static API_TOPIC_ALL: string = "/topics";
+  static API_TOPIC_CURRENT: string = "/topics/active";
+  static API_TOPIC_BY_ID = (id: number | string): string => `/topics/${id}`;
+  static API_ESSAY: string = "/essays";
+  static API_ESSAY_PAGE = (page: number, size: number, sortBy = "createdOn", direction = "desc"): string =>
+    `/essays?page=${page}&size=${size}&sortBy=${sortBy}&direction=${direction}`;
+  static API_ESSAY_MINE = (page: number, size: number | string): string => `/essays/mine?page=${page}&size=${size}`;
+  static API_ESSAY_YET_TO_FEEDBACK = (page: number, size: number | string): string => `/essays/not-voted?page=${page}&size=${size}`;
+  static API_ESSAY_WEEKLY_TOP3: string = "/essays/top-week";
+  static API_ESSAY_BY_ID = (id: number | string): string => `/essays/${id}`;
+  static API_ESSAY_EXISTS_BY_TOPIC = (id: number | string): string => `/essays/exists-by-topic/${id}`;
+  static API_ESSAY_ALL_BY_TOPIC_ID = (id: number | string): string => `/essays/by-topic/${id}`;
+  static API_ESSAY_ALL_BY_USER_ID = (id: number | string): string => `/essays/by-user/${id}`;
+  static API_ESSAY_LAST_BY_CATEGORY = (id: number | string): string => `/essays/by-category/${id}`;
+  static API_COUNT_ALL_USER_ESSAY = (id: number | string): string => `/essays/count-by-author/${id}`;
+  static API_FEEDBACK_PAGE = (page: number, size: number, sortBy = "createdOn", direction = "desc"): string =>
+    `/feedback?page=${page}&size=${size}&sortBy=${sortBy}&direction=${direction}`;
+  static API_FEEDBACK_BY_ID = (id: number | string): string => `/feedback/${id}`;
+  static API_FEEDBACK_ALL_BY_USER_ID = (id: number | string): string => `/essays/by-user/${id}`;
+  static API_FEEDBACK_AVG_BY_USER_ID = (id: number | string): string => `/feedback/avg-by-author/${id}`;
+  static API_FEEDBACK_AVG_BY_ESSAY_ID = (id: number | string): string => `/feedback/avg-by-essay/${id}`;
+  static API_FEEDBACK_SEND: string = "/feedback";
+}
