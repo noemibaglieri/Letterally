@@ -84,20 +84,6 @@ const ModerationPage = () => {
     }
   };
 
-  const deleteEssay = async (id: number) => {
-    const ok = confirm("Delete this essay?");
-    if (!ok) return;
-    const done = await essayService.delete(id);
-    if (done) loadEssays();
-  };
-
-  const deleteComment = async (id: number) => {
-    const ok = confirm("Delete this comment?");
-    if (!ok) return;
-    const done = await feedbackService.delete(id);
-    if (done) loadComments();
-  };
-
   useEffect(() => {
     loadEssays();
     loadComments();
@@ -121,26 +107,72 @@ const ModerationPage = () => {
               <Row className="g-3">
                 {essays.map((e) => (
                   <Col md={6} key={e.id}>
-                    <Card className="shadow-sm border-0 rounded-3 p-3 h-100">
-                      <h6 className="fw-bold">{e.title}</h6>
-                      <small className="text-muted">
-                        {e.user?.username} •{" "}
-                        {e.createdOn &&
-                          new Date(e.createdOn).toLocaleDateString("en-US", {
-                            day: "numeric",
-                            month: "long",
-                            year: "numeric",
-                          })}
-                      </small>
-                      <p className="mt-2 clamp-3">{e.content}</p>
-                      <div className="d-flex justify-content-end gap-2">
+                    <Card className="border-0 rounded-3 shadow-sm h-100 overflow-hidden">
+                      {/* Image preview */}
+                      {e.image ? (
+                        <div
+                          style={{
+                            height: "160px",
+                            backgroundImage: `url(${e.image})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                          }}
+                        />
+                      ) : (
+                        <div className="d-flex align-items-center justify-content-center bg-light text-muted" style={{ height: "160px" }}>
+                          <i className="fa-solid fa-image fa-2x" />
+                        </div>
+                      )}
+
+                      {/* Header */}
+                      <Card.Header className="bg-white border-0">
+                        <div className="d-flex align-items-center gap-2">
+                          <img
+                            src={e.user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(e.user?.username || "Anon")}`}
+                            alt="avatar"
+                            className="rounded-circle"
+                            width={36}
+                            height={36}
+                          />
+                          <div>
+                            <div className="fw-semibold">{e.user?.username ?? "Anonymous"}</div>
+                            <small className="text-muted">
+                              {e.createdOn &&
+                                new Date(e.createdOn).toLocaleDateString("en-US", {
+                                  day: "numeric",
+                                  month: "long",
+                                  year: "numeric",
+                                })}
+                            </small>
+                          </div>
+                        </div>
+                      </Card.Header>
+
+                      {/* Body */}
+                      <Card.Body>
+                        <h6 className="fw-bold mb-2">{e.title}</h6>
+                        <p
+                          className="mb-0 text-body"
+                          style={{
+                            display: "-webkit-box",
+                            WebkitLineClamp: 4,
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                          }}
+                        >
+                          {e.content}
+                        </p>
+                      </Card.Body>
+
+                      {/* Footer */}
+                      <Card.Footer className="bg-white border-0 d-flex justify-content-end gap-2 p-3">
                         <Button size="sm" variant="outline-primary" onClick={() => navigate(`/essays/${e.id}`)}>
                           View
                         </Button>
                         <Button size="sm" variant="danger" onClick={() => askDeleteEssay(e.id!, e.title)}>
                           Delete
                         </Button>
-                      </div>
+                      </Card.Footer>
                     </Card>
                   </Col>
                 ))}
@@ -161,23 +193,71 @@ const ModerationPage = () => {
               <Row className="g-3">
                 {comments.map((c) => (
                   <Col md={6} key={c.id}>
-                    <Card className="shadow-sm border-0 rounded-3 p-3 h-100">
-                      <h6 className="mb-1">{c.user?.username ?? "Anonymous"}</h6>
-                      <small className="text-muted">
-                        {c.createdOn &&
-                          new Date(c.createdOn).toLocaleDateString("en-US", {
-                            day: "numeric",
-                            month: "long",
-                            year: "numeric",
-                          })}
-                        {c.essay?.title ? ` • on “${c.essay.title}”` : ""}
-                      </small>
-                      <p className="mt-2">{c.comment ?? c.content}</p>
-                      <div className="d-flex justify-content-end">
+                    <Card className="border-0 rounded-3 shadow-sm h-100">
+                      {/* Header */}
+                      <Card.Header className="bg-white border-0 pb-0">
+                        <div className="d-flex align-items-center justify-content-between">
+                          <div className="d-flex align-items-center gap-2">
+                            <img
+                              src={c.user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(c.user?.username || "Anon")}`}
+                              alt="avatar"
+                              className="rounded-circle"
+                              width={36}
+                              height={36}
+                            />
+                            <div>
+                              <div className="fw-semibold">{c.user?.username ?? "Anonymous"}</div>
+                              <small className="text-muted">
+                                {c.createdOn
+                                  ? new Date(c.createdOn).toLocaleDateString("en-US", {
+                                      day: "numeric",
+                                      month: "long",
+                                      year: "numeric",
+                                    })
+                                  : ""}
+                              </small>
+                            </div>
+                          </div>
+
+                          {/* rating pill (se hai il campo c.value) */}
+                          {typeof c.value === "number" && <span className="badge rounded-pill bg-dark-subtle text-dark-emphasis">★ {c.value}</span>}
+                        </div>
+                      </Card.Header>
+
+                      {/* Body */}
+                      <Card.Body>
+                        {/* Essay context */}
+                        <div className="d-flex align-items-center justify-content-between mb-2">
+                          <div className="text-truncate me-2">
+                            <small className="text-muted">on</small>{" "}
+                            <span className="fw-semibold text-truncate" title={c.essay?.title || ""}>
+                              {c.essay?.title ?? "—"}
+                            </span>
+                            {c.essay?.id && <small className="text-muted ms-2">(# {c.essay.id})</small>}
+                          </div>
+                        </div>
+
+                        {/* Comment text */}
+                        <p className="mb-0 text-body" style={{ display: "-webkit-box", WebkitLineClamp: 4, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                          {c.content}
+                        </p>
+                      </Card.Body>
+
+                      {/* Footer */}
+                      <Card.Footer className="bg-white border-0 d-flex justify-content-end gap-2 pt-0 pb-3 px-3">
+                        <Button
+                          size="sm"
+                          variant="outline-primary"
+                          onClick={() => c.essay?.id && navigate(`/essays/${c.essay.id}`)}
+                          disabled={!c.essay?.id}
+                          title={c.essay?.id ? "Open the related essay" : "Essay not available"}
+                        >
+                          View essay
+                        </Button>
                         <Button size="sm" variant="danger" onClick={() => askDeleteComment(c.id!)}>
                           Delete
                         </Button>
-                      </div>
+                      </Card.Footer>
                     </Card>
                   </Col>
                 ))}

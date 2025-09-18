@@ -84,7 +84,9 @@ const BackofficePage = () => {
             </Row>
           </Col>
           <Col md={12}>
-            <h6 className="text-uppercase custom-fs">Upcoming topics</h6>
+            <h6 className="text-uppercase custom-fs">
+              <strong>{upcoming.length}</strong> Upcoming topics
+            </h6>
             <Row className="gx-3 gy-3">
               {loading ? (
                 <Spinner animation="border" />
@@ -108,7 +110,10 @@ const BackofficePage = () => {
           </Col>
 
           <Col md={12}>
-            <h6 className="text-uppercase custom-fs">Past topics</h6>
+            <h6 className="text-uppercase custom-fs">
+              {" "}
+              <strong>{past.length}</strong> Past topics
+            </h6>
             <Row className="gx-3 gy-3">
               {loading ? (
                 <Spinner animation="border" />

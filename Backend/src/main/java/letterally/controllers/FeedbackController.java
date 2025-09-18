@@ -4,10 +4,7 @@ import letterally.entities.Feedback;
 import letterally.entities.User;
 import letterally.exceptions.BadRequestException;
 import letterally.exceptions.ValidationException;
-import letterally.payloads.FeedbackRespDTO;
-import letterally.payloads.NewFeedbackDTO;
-import letterally.payloads.UpdateFeedbackDTO;
-import letterally.payloads.UserRespDTO;
+import letterally.payloads.*;
 import letterally.services.FeedbacksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -57,6 +54,7 @@ public class FeedbackController {
                                 f.getUser().getRegisteredOn(),
                                 f.getUser().getRole() != null ? f.getUser().getRole().getName() : null
                         ),
+                        f.getEssay() != null ? new EssaySummaryDTO(f.getEssay().getId(), f.getEssay().getTitle()) : null,
                         f.getCreatedOn(),
                         f.getLastUpdated()
                 ));
@@ -81,6 +79,7 @@ public class FeedbackController {
                                 f.getUser().getRegisteredOn(),
                                 f.getUser().getRole() != null ? f.getUser().getRole().getName() : null )
                         ,
+                        f.getEssay() != null ? new EssaySummaryDTO(f.getEssay().getId(), f.getEssay().getTitle()) : null,
                         f.getCreatedOn(),
                         f.getLastUpdated()
                 ));
@@ -105,6 +104,7 @@ public class FeedbackController {
                                 f.getUser().getRegisteredOn(),
                                 f.getUser().getRole() != null ? f.getUser().getRole().getName() : null )
                         ,
+                        f.getEssay() != null ? new EssaySummaryDTO(f.getEssay().getId(), f.getEssay().getTitle()) : null,
                         f.getCreatedOn(),
                         f.getLastUpdated()
                 ));
@@ -134,6 +134,7 @@ public class FeedbackController {
                         created.getUser().getRegisteredOn(),
                         created.getUser().getRole() != null ? created.getUser().getRole().getName() : null )
                 ,
+                created.getEssay() != null ? new EssaySummaryDTO(created.getEssay().getId(), created.getEssay().getTitle()) : null,
                 created.getCreatedOn(),
                 created.getLastUpdated()
         );
@@ -168,6 +169,7 @@ public class FeedbackController {
                         updated.getUser().getRegisteredOn(),
                         updated.getUser().getRole() != null ? updated.getUser().getRole().getName() : null )
                 ,
+                updated.getEssay() != null ? new EssaySummaryDTO(updated.getEssay().getId(), updated.getEssay().getTitle()) : null,
                 updated.getCreatedOn(),
                 updated.getLastUpdated()
         );

@@ -7,6 +7,7 @@ public record FeedbackRespDTO(
         Integer value,
         String content,
         UserRespDTO user,
+        EssaySummaryDTO essay,
         LocalDateTime createdOn,
         LocalDateTime lastUpdated
 ) {}

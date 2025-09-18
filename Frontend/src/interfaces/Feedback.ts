@@ -5,5 +5,10 @@ export interface Feedback {
   value: number;
   content: string;
   user: User;
-  createdOn: Date;
+  essay?: {
+    id: number;
+    title: string;
+  };
+  createdOn: string;
+  lastUpdated?: string;
 }

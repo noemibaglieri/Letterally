@@ -50,6 +50,7 @@ public class EssaysController {
                                     e.getUser().getRole() != null ? e.getUser().getRole().getName() : null
                             )
                                     : null),
+                            f.getEssay() != null ? new EssaySummaryDTO(f.getEssay().getId(), f.getEssay().getTitle()) : null,
                             f.getCreatedOn(),
                             f.getLastUpdated()
                     )).toList();
@@ -114,6 +115,7 @@ public class EssaysController {
                                 e.getUser().getRole() != null ? e.getUser().getRole().getName() : null )
 
                                 : null),
+                        f.getEssay() != null ? new EssaySummaryDTO(f.getEssay().getId(), f.getEssay().getTitle()) : null,
                         f.getCreatedOn(),
                         f.getLastUpdated()
                 ))
@@ -185,6 +187,7 @@ public class EssaysController {
                                     f.getUser().getRole() != null ? f.getUser().getRole().getName() : null )
 
                                     : null),
+                            f.getEssay() != null ? new EssaySummaryDTO(f.getEssay().getId(), f.getEssay().getTitle()) : null,
                             f.getCreatedOn(),
                             f.getLastUpdated()
                     ))
@@ -265,6 +268,7 @@ public class EssaysController {
                                     f.getUser().getRegisteredOn(),
                                     e.getUser().getRole() != null ? e.getUser().getRole().getName() : null )
                                     : null),
+                            f.getEssay() != null ? new EssaySummaryDTO(f.getEssay().getId(), f.getEssay().getTitle()) : null,
                             f.getCreatedOn(),
                             f.getLastUpdated()
                     ))
@@ -331,6 +335,7 @@ public class EssaysController {
                                     e.getUser().getRole() != null ? e.getUser().getRole().getName() : null )
 
                                     : null),
+                            f.getEssay() != null ? new EssaySummaryDTO(f.getEssay().getId(), f.getEssay().getTitle()) : null,
                             f.getCreatedOn(),
                             f.getLastUpdated()
                     ))
