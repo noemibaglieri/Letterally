@@ -56,11 +56,11 @@ const TopicComponent = (props: Topic) => {
             </div>
             <Card.Text className="mt-3 clamp-2">{props.description}</Card.Text>
             {location.pathname === "/homepage" && hasWritten === false ? (
-              <Button className="align-self-end" variant="warning" onClick={() => navigate(`/create/${props.id}/essay`)}>
+              <Button className="align-self-end fw-semibold text-white text-uppercase" variant="warning" onClick={() => navigate(`/create/${props.id}/essay`)}>
                 Write your essay
               </Button>
             ) : (
-              <Button className="align-self-end" variant="warning" onClick={() => navigate(`/essays/${myEssayId}`)}>
+              <Button className="align-self-end fw-semibold text-white text-uppercase" variant="warning" onClick={() => navigate(`/essays/${myEssayId}`)}>
                 View your essay
               </Button>
             )}
