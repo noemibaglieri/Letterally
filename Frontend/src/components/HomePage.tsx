@@ -284,10 +284,15 @@ const HomePage = () => {
                     <Col md={4} key={e.id}>
                       <div className="card shadow-sm border-0 position-relative">
                         {e.image && (
-                          <div className="position-relative">
-                            <img src={e.image} className="card-img-top" alt={e.title} style={{ minHeight: 220, maxHeight: 220, objectFit: "cover" }} />
+                          <div className="position-relative rounded-top-3">
+                            <img
+                              src={e.image}
+                              className="card-img-top rounded-top-3"
+                              alt={e.title}
+                              style={{ minHeight: 220, maxHeight: 220, objectFit: "cover" }}
+                            />
                             <div></div>
-                            <div className="position-absolute top-0 start-0 w-100 h-100" style={{ backgroundColor: "rgba(0,0,0,0.6)" }}>
+                            <div className="position-absolute top-0 start-0 w-100 h-100 rounded-3" style={{ backgroundColor: "rgba(0,0,0,0.6)" }}>
                               <img
                                 src={medals[index]}
                                 alt="medal"

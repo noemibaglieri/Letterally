@@ -94,20 +94,22 @@ const SortedTopic = ({ topic, onEdit, onDelete }: Props) => {
         </div>
       </Card.Body>
 
-      <div className="p-3 bg-white d-flex justify-content-end gap-2">
-        {onEdit && (
-          <Button size="sm" variant="warning" onClick={() => onEdit(topic.id!)}>
-            <i className="fa-solid fa-pen-to-square me-1" />
-            Edit
-          </Button>
-        )}
-        {onDelete && (
-          <Button size="sm" variant="danger" onClick={() => onDelete(topic.id!)}>
-            <i className="fa-solid fa-trash me-1" />
-            Delete
-          </Button>
-        )}
-      </div>
+      {onEdit && (
+        <div className="p-3 bg-white d-flex justify-content-end gap-2">
+          {onEdit && (
+            <Button size="sm" variant="warning" onClick={() => onEdit(topic.id!)}>
+              <i className="fa-solid fa-pen-to-square me-1" />
+              Edit
+            </Button>
+          )}
+          {onDelete && (
+            <Button size="sm" variant="danger" onClick={() => onDelete(topic.id!)}>
+              <i className="fa-solid fa-trash me-1" />
+              Delete
+            </Button>
+          )}
+        </div>
+      )}
     </Card>
   );
 };
