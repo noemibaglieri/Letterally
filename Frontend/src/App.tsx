@@ -10,6 +10,7 @@ import EssayPage from "./components/EssayPage";
 import WritingPage from "./components/WritingPage";
 import BackofficePage from "./components/BackofficePage";
 import ModerationPage from "./components/ModerationPage";
+import TopicsPage from "./components/TopicsPage";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/essays/:id" element={<EssayPage />} />
+          <Route path="/topics" element={<TopicsPage />} />
           <Route path="/edit/:topicId/essay/:essayId" element={<WritingPage />} />
           <Route path="/create/:topicId/essay" element={<WritingPage />} />
           <Route path="/backoffice" element={<BackofficePage />} />
