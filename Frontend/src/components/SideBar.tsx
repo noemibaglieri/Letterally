@@ -59,7 +59,7 @@ const SideBar = () => {
             </Link>
           </Nav.Item>
           <Nav.Item>
-            <Link to="/topics" className="sidebar-link d-flex align-items-center gap-2">
+            <Link to="/topics" className={`sidebar-link d-flex align-items-center gap-2 ${location.pathname === "/topics" ? "active" : ""}`}>
               <FontAwesomeIcon icon={faTableCellsLarge} /> Topics
             </Link>
           </Nav.Item>

@@ -1,4 +1,4 @@
-import { Button, Col, Modal, Row, Spinner } from "react-bootstrap";
+import { Badge, Button, Col, Modal, Row, Spinner } from "react-bootstrap";
 import SideBar from "./SideBar";
 import TopicComponent from "./TopicComponent";
 import { useEffect, useState } from "react";
@@ -276,17 +276,31 @@ const HomePage = () => {
               <h6 className="text-uppercase custom-fs">Weekly top 3</h6>
               <Row className="d-flex flex-row">
                 {top3.map((e, index) => {
-                  const medals = ["🥇", "🥈", "🥉"];
+                  const medals = ["../src/assets/first-place.png", "../src/assets/second-place.png", "../src/assets/third-place.png"];
+                  const labels = ["1st place", "2nd place", "3rd place"];
+                  const rankingColors = ["#F4C008", "#B0AFAF", "#EF9685"];
 
                   return (
                     <Col md={4} key={e.id}>
-                      <div className="card shadow-sm border-0">
-                        {e.image && <img src={e.image} className="card-img-top" alt={e.title} style={{ minHeight: 220, maxHeight: 220, objectFit: "cover" }} />}
+                      <div className="card shadow-sm border-0 position-relative">
+                        {e.image && (
+                          <div className="position-relative">
+                            <img src={e.image} className="card-img-top" alt={e.title} style={{ minHeight: 220, maxHeight: 220, objectFit: "cover" }} />
+                            <div></div>
+                            <div className="position-absolute top-0 start-0 w-100 h-100" style={{ backgroundColor: "rgba(0,0,0,0.6)" }}>
+                              <img
+                                src={medals[index]}
+                                alt="medal"
+                                className="position-absolute top-50 start-50 translate-middle"
+                                style={{ width: 90, height: 90 }}
+                              />
+                            </div>
+                          </div>
+                        )}
+
                         <div className="card-body d-flex flex-column gap-2">
-                          <span style={{ fontSize: "1.5rem" }}>{medals[index]} TOP 3</span>
-                          <div className="badge d-flex gap-1 align-self-start" style={{ backgroundColor: e.topic?.category?.color || "#6c757d" }}>
-                            <i className={"fa-solid fa-" + e.topic?.category?.icon}></i>
-                            {e.topic?.category?.name}
+                          <div className="badge d-flex gap-1 align-self-start text-uppercase" style={{ backgroundColor: `${rankingColors[index]}` }}>
+                            {labels[index]}
                           </div>
                           <h6 className="card-title mb-1">{e.title}</h6>
                           <small className="text-muted d-block mb-2">{new Date(e.createdOn!).toLocaleDateString()}</small>

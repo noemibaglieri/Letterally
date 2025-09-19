@@ -32,10 +32,16 @@ build/
 ### VS Code ###
 .vscode/
 Frontend/node_modules
-# Vite cache/build
-.vite/
-Frontend/vite/deps/
-dist/
+**/node_modules/
+**/.vite/
+**/vite/deps/
+**/dist/
+**/build/
+**/.cache/
+**/.parcel-cache/
+**/.eslintcache/
+
+**/*.map
 
 env.properties
 Backend/.DS_Store
