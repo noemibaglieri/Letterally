@@ -1,4 +1,3 @@
-// src/components/WritingPage.tsx
 import { useEffect, useMemo, useState } from "react";
 import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
 import SideBar from "./SideBar";
@@ -12,6 +11,14 @@ import { useParams } from "react-router";
 import { UserService } from "../services/user.service";
 import type { User } from "../interfaces/User";
 import { StorageService } from "../services/storage.service";
+import ReactQuill from "react-quill-new";
+
+const stripHtml = (html: string) =>
+  html
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const WritingPage = () => {
   const [topic, setTopic] = useState<Topic | null>(null);
@@ -25,33 +32,43 @@ const WritingPage = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [save, setSave] = useState(false);
+
   const essayService = useMemo(() => new EssayService(), []);
   const topicService = useMemo(() => new TopicService(), []);
   const params = useParams();
   const isEdit = !!params.essayId;
 
+  const quillModules = useMemo(
+    () => ({
+      toolbar: [
+        [{ header: [1, 2, 3, false] }],
+        ["bold", "italic", "underline", "strike"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        [{ align: [] }],
+        ["link", "blockquote", "code-block"],
+        ["clean"],
+      ],
+      clipboard: { matchVisual: false },
+    }),
+    []
+  );
+
+  const quillFormats = ["header", "bold", "italic", "underline", "strike", "list", "bullet", "align", "link", "blockquote", "code-block"];
+
   const getEssayById = async () => {
     const response = await essayService.getById(parseInt(params.essayId!));
-    if (response) {
-      setEssay(response);
-    } else {
-      setEssay(null);
-    }
+    if (response) setEssay(response);
+    else setEssay(null);
   };
 
   const getTopicById = async () => {
     const response = await topicService.getTopicById(parseInt(params.topicId!));
-
-    if (response) {
-      setTopic(response);
-    } else {
-      setTopic(null);
-    }
+    if (response) setTopic(response);
+    else setTopic(null);
   };
 
   const getAllEssaysByTopicId = async () => {
     const response = await essayService.getAllByTopicId(parseInt(params.topicId!));
-
     if (response) {
       const currentUser = StorageService.getUser();
       const filtered = response.filter((e): e is Essay => e !== null && e.user?.id !== currentUser?.id).slice(0, 5);
@@ -71,7 +88,11 @@ const WritingPage = () => {
     if (!title.trim()) validationErrors.title = "Title is required";
     if (!topic?.id) validationErrors.topic = "No active topic found";
     if (!isEdit && !imageFile) validationErrors.imageFile = "Cover image is required";
-    if (!content.trim() || content.trim().length < 30) validationErrors.content = "Content must be at least 30 characters long";
+
+    const plain = stripHtml(content);
+    if (!plain || plain.length < 30) {
+      validationErrors.content = "Content must be at least 30 characters long";
+    }
 
     if (Object.keys(validationErrors).length) {
       setErrors(validationErrors);
@@ -121,7 +142,6 @@ const WritingPage = () => {
 
     (async () => {
       const res = await essayService.getById(essayId);
-      console.log("GET essay", res);
       if (res) {
         setEssay(res);
         setTitle(res.title ?? "");
@@ -136,9 +156,9 @@ const WritingPage = () => {
   }, []);
 
   return (
-    <div className="d-flex">
+    <div className="d-lg-flex">
       <SideBar />
-      <div className="let-max-height  mt-3 mb-3 rounded-3 w-100 overflow-hidden overflow-scroll">
+      <div className="let-max-height mt-3 mb-3 rounded-3 w-100 overflow-hidden overflow-scroll">
         <Row className="mx-auto gy-4">
           <Col md={8} className="px-0">
             <div className="ps-3 mx-auto gy-4 h-100 ">
@@ -146,6 +166,7 @@ const WritingPage = () => {
               <div className="rounded-3 bg-white">
                 <div className="p-3">
                   {success && <div className="alert alert-success mt-2">{isEdit ? "Essay updated successfully!" : "Essay created successfully!"}</div>}
+
                   <Form noValidate onSubmit={savePost}>
                     <Row className="mb-3">
                       <Form.Group as={Col} controlId="essayTitle">
@@ -178,7 +199,7 @@ const WritingPage = () => {
                       <Form.Label as={Col}>Type your thoughts</Form.Label>
 
                       <Col className="text-end d-flex justify-content-end gap-2 mb-2">
-                        <Button variant="outline-primary" className="pt-0 pb-0" size="sm" disabled={loading} onClick={() => setSave(false)}>
+                        <Button variant="outline-primary" className="pt-0 pb-0" size="sm" disabled={loading} onClick={() => setSave(false)} type="button">
                           {loading ? <Spinner size="sm" animation="border" className="me-2" /> : null}
                           Save draft
                         </Button>
@@ -197,21 +218,26 @@ const WritingPage = () => {
                     </Row>
 
                     <Form.Group className="editor-box flex-grow-1 min-h-0">
-                      <Form.Control.Feedback type="invalid">{errors.content}</Form.Control.Feedback>
-                      <Form.Control
-                        as="textarea"
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                        placeholder="Write your essay here…"
-                        className="border-0 h-100"
-                        isInvalid={!!errors.content}
-                      />
+                      {errors.content ? <div className="invalid-feedback d-block">{errors.content}</div> : null}
+
+                      <div className={`rounded-3 ${errors.content ? "is-invalid border border-danger" : ""}`}>
+                        <ReactQuill
+                          className="quill-editor"
+                          theme="snow"
+                          value={content}
+                          onChange={(value) => setContent(value)}
+                          modules={quillModules}
+                          formats={quillFormats}
+                          placeholder="Write your essay here…"
+                        />
+                      </div>
                     </Form.Group>
                   </Form>
                 </div>
               </div>
             </div>
           </Col>
+
           <Col md={4} className="p-0 overflow-custom">
             <Row className="mx-auto gy-4 overflow-custom-child">
               <Col md={12} className="px-3">

@@ -428,3 +428,33 @@ a:hover {
   left: 0;
   top: 0;
 }
+
+.ql-container {
+  font-size: 1rem;
+}
+
+@media (max-width: 576px) {
+  .ql-toolbar.ql-snow {
+    padding: 6px !important;
+  }
+  .ql-container.ql-snow {
+    min-height: 220px;
+  }
+}
+
+.quill-editor .ql-container {
+  height: 360px;
+  overflow-y: auto;
+}
+
+.quill-editor .ql-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.quill-editor .ql-editor {
+  line-height: 1.6;
+}

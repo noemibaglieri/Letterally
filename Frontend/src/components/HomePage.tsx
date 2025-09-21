@@ -53,6 +53,9 @@ const HomePage = () => {
       }
       setShowDeleteModal(false);
       setEssayToDelete(null);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     }
   };
 
@@ -110,7 +113,6 @@ const HomePage = () => {
   const loadMoreNotVotedEssays = () => {
     if (loading) return;
     if (pageEssaysToVote < totalPagesEssaysToVote - 1) {
-      // FIX: call the correct loader
       loadEssaysToVote(pageEssaysToVote + 1);
     }
   };
@@ -174,8 +176,7 @@ const HomePage = () => {
                           <h6 className="card-title mb-1">{e.title}</h6>
                           <small className="text-muted d-block mb-2">{new Date(e.createdOn!).toLocaleDateString()}</small>
                           <p className="card-text mb-3">
-                            {e.content.slice(0, 120)}
-                            {e.content.length > 120 ? "…" : ""}
+                            <div dangerouslySetInnerHTML={{ __html: e.content.slice(0, 120) }}></div>
                           </p>
                           <div className="d-flex justify-content-between flex-grow-1 align-items-end">
                             <button className="btn btn-outline-primary btn-sm" onClick={() => navigate(`/essays/${e.id}`)}>
@@ -246,8 +247,7 @@ const HomePage = () => {
                           <h6 className="card-title mb-1">{e.title}</h6>
                           <small className="text-muted d-block mb-2">{new Date(e.createdOn!).toLocaleDateString()}</small>
                           <p className="card-text mb-3">
-                            {e.content.slice(0, 120)}
-                            {e.content.length > 120 ? "…" : ""}
+                            <div dangerouslySetInnerHTML={{ __html: e.content.slice(0, 120) }}></div>
                           </p>
                           <div className="d-flex justify-content-between flex-grow-1 align-items-end">
                             <button className="btn btn-outline-primary btn-sm" onClick={() => navigate(`/essays/${e.id}`)}>
@@ -316,8 +316,7 @@ const HomePage = () => {
                           <h6 className="card-title mb-1">{e.title}</h6>
                           <small className="text-muted d-block mb-2">{new Date(e.createdOn!).toLocaleDateString()}</small>
                           <p className="card-text mb-3">
-                            {e.content.slice(0, 120)}
-                            {e.content.length > 120 ? "…" : ""}
+                            <div dangerouslySetInnerHTML={{ __html: e.content.slice(0, 120) }}></div>
                           </p>
                           <div className="d-flex justify-content-between">
                             <button className="btn btn-outline-primary btn-sm" onClick={() => navigate(`/essays/${e.id}`)}>
