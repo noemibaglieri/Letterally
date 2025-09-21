@@ -5,7 +5,7 @@ export class StorageService {
     localStorage.setItem("authToken", token);
   }
 
-  static getToken(): string {
+  static getToken(): string | null {
     return localStorage.getItem("authToken")!;
   }
 
