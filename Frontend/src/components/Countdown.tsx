@@ -1,5 +1,3 @@
-import { faAlarmClock } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useMemo, useState } from "react";
 
 type CountdownProps = {

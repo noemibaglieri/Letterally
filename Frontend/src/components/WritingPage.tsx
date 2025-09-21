@@ -12,7 +12,6 @@ import { useParams } from "react-router";
 import { UserService } from "../services/user.service";
 import type { User } from "../interfaces/User";
 import { StorageService } from "../services/storage.service";
-import FooterComponent from "./FooterComponent";
 
 const WritingPage = () => {
   const [topic, setTopic] = useState<Topic | null>(null);
@@ -217,7 +216,7 @@ const WritingPage = () => {
             <Row className="mx-auto gy-4 overflow-custom-child">
               <Col md={12} className="px-3">
                 <h6 className="text-uppercase custom-fs">The topic</h6>
-                <div className="rounded-3 main-bg-dark text-white p-3">{topic ? <TopicComponent {...topic} /> : <p>Loading topic...</p>}</div>
+                <div className="rounded-3 main-bg-dark text-white">{topic ? <TopicComponent {...topic} /> : <p>Loading topic...</p>}</div>
               </Col>
               <Col md={12} className="px-3">
                 <h6 className="text-uppercase custom-fs">More essays on this topic</h6>

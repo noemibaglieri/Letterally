@@ -31,7 +31,7 @@ export type EssayResponse = {
   id?: number;
   title: string;
   content: string;
-  image: string;
+  image?: string;
   topic?: Topic;
   user?: User;
   createdOn?: Date;

@@ -9,7 +9,6 @@ import SortedTopic from "./SortedTopic";
 
 const TopicsPage = () => {
   const [activeTopic, setActiveTopic] = useState<Topic | null>(null);
-  const [upcoming, setUpcoming] = useState<Topic[]>([]);
   const [past, setPast] = useState<Topic[]>([]);
   const [loading, setLoading] = useState(true);
   const topicService = new TopicService();
@@ -26,7 +25,6 @@ const TopicsPage = () => {
       upcomingList.sort((a, b) => +new Date(a.startDate) - +new Date(b.startDate));
       pastList.sort((a, b) => +new Date(b.endDate) - +new Date(a.endDate));
 
-      setUpcoming(upcomingList);
       setPast(pastList);
     } catch {
       toast.error("Failed to load topics");

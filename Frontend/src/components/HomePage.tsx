@@ -1,4 +1,4 @@
-import { Badge, Button, Col, Modal, Row, Spinner } from "react-bootstrap";
+import { Button, Col, Modal, Row, Spinner } from "react-bootstrap";
 import SideBar from "./SideBar";
 import TopicComponent from "./TopicComponent";
 import { useEffect, useState } from "react";
@@ -49,8 +49,7 @@ const HomePage = () => {
     if (essayToDelete !== null) {
       const success = await essayService.delete(essayToDelete);
       if (success) {
-        const filteredItems = items.filter((item) => item.id !== essayToDelete);
-        setItems(filteredItems);
+        setItems((prev) => prev.filter((item) => item.id !== essayToDelete));
       }
       setShowDeleteModal(false);
       setEssayToDelete(null);
@@ -62,12 +61,13 @@ const HomePage = () => {
     const data = await essayService.getAllYetToFeedback(p, sizeEssaysToVote);
 
     if (data) {
-      setEssaysToVote([...essaysToVote, ...(data.content as EssayResponse[])]);
+      setEssaysToVote((prev) => [...prev, ...(data.content as EssayResponse[])]);
       setTotalPagesEssaysToVote(data.totalPages || 0);
       setPageEssaysToVote(data.number || 0);
     } else {
       setEssaysToVote([]);
       setTotalPagesEssaysToVote(0);
+      setPageEssaysToVote(0);
     }
     setLoading(false);
   };
@@ -77,12 +77,13 @@ const HomePage = () => {
     const data = await essayService.getAllOwnEssays(p, sizeMyEssays);
 
     if (data) {
-      setItems([...items, ...(data.content as EssayResponse[])]);
+      setItems((prev) => [...prev, ...(data.content as EssayResponse[])]);
       setTotalPagesMyEssays(data.totalPages || 0);
       setPageMyEssays(data.number || 0);
     } else {
       setItems([]);
       setTotalPagesMyEssays(0);
+      setPageMyEssays(0);
     }
     setLoading(false);
   };
@@ -109,7 +110,8 @@ const HomePage = () => {
   const loadMoreNotVotedEssays = () => {
     if (loading) return;
     if (pageEssaysToVote < totalPagesEssaysToVote - 1) {
-      load(pageEssaysToVote + 1);
+      // FIX: call the correct loader
+      loadEssaysToVote(pageEssaysToVote + 1);
     }
   };
 
@@ -136,7 +138,7 @@ const HomePage = () => {
 
   return (
     <>
-      <div className="d-flex rounded-3">
+      <div className="d-lg-flex rounded-3">
         <SideBar />
         <div className="mt-3 mb-3 w-100 overflow-custom overflow-scroll rounded-3 let-max-height">
           <Row className="mx-auto gy-4 rounded-3">
@@ -144,6 +146,8 @@ const HomePage = () => {
               <h6 className="text-uppercase custom-fs">Welcome back</h6>
               <Row className="mx-auto gap-3">{activeTopic ? <TopicComponent {...activeTopic} /> : <p>Loading user...</p>}</Row>
             </Col>
+
+            {/* MY ESSAYS */}
             <Col md={12} className="px-3">
               <h6 className="text-uppercase custom-fs">My essays</h6>
 
@@ -151,7 +155,6 @@ const HomePage = () => {
                 <p className="text-muted fst-italic mb-0">You haven’t written any essays yet.</p>
               ) : (
                 <>
-                  {/* SCROLLER ORIZZONTALE */}
                   <div className="d-flex flex-row flex-nowrap overflow-auto gap-3 pb-2">
                     {items.map((e) => (
                       <div key={e.id} className="card shadow-sm rounded-3 border-0" style={{ minWidth: 520, maxWidth: 520 }}>
@@ -207,7 +210,7 @@ const HomePage = () => {
 
                     {pageMyEssays < totalPagesMyEssays - 1 && (
                       <div className="d-flex align-items-center">
-                        <a onClick={loadMoreMyEssays} style={{ minWidth: 160 }}>
+                        <a onClick={loadMoreMyEssays} className="btn btn-link" style={{ minWidth: 160 }}>
                           {loading ? "Loading…" : "Load more"} <FontAwesomeIcon icon={faArrowRight} />
                         </a>
                       </div>
@@ -222,14 +225,15 @@ const HomePage = () => {
                 </>
               )}
             </Col>
+
+            {/* READ & VOTE */}
             <Col md={12} className="px-3">
               <h6 className="text-uppercase custom-fs">Read & Vote</h6>
 
-              {items.length === 0 ? (
+              {essaysToVote.length === 0 && !loading ? (
                 <p className="text-muted fst-italic mb-0">You voted all the available essays! Yay! Let's wait for more...</p>
               ) : (
                 <>
-                  {/* SCROLLER ORIZZONTALE */}
                   <div className="d-flex flex-row flex-nowrap overflow-auto gap-3 pb-2">
                     {essaysToVote.map((e) => (
                       <div key={e.id} className="card shadow-sm border-0" style={{ minWidth: 520, maxWidth: 520 }}>
@@ -256,14 +260,14 @@ const HomePage = () => {
 
                     {pageEssaysToVote < totalPagesEssaysToVote - 1 && (
                       <div className="d-flex align-items-center">
-                        <a onClick={loadMoreNotVotedEssays} style={{ minWidth: 160 }}>
+                        <a onClick={loadMoreNotVotedEssays} className="btn btn-link" style={{ minWidth: 160 }}>
                           {loading ? "Loading…" : "Load more"} <FontAwesomeIcon icon={faArrowRight} />
                         </a>
                       </div>
                     )}
                   </div>
 
-                  {loading && items.length === 0 && (
+                  {loading && essaysToVote.length === 0 && (
                     <div className="text-center py-4">
                       <Spinner animation="border" />
                     </div>
@@ -271,7 +275,10 @@ const HomePage = () => {
                 </>
               )}
             </Col>
+
             {top3.length === 0 && !loading && <p className="text-muted fst-italic mb-0">No essays this week...</p>}
+
+            {/* WEEKLY TOP 3 */}
             <Col md={12} className="px-3">
               <h6 className="text-uppercase custom-fs">Weekly top 3</h6>
               <Row className="d-flex flex-row">
@@ -291,7 +298,6 @@ const HomePage = () => {
                               alt={e.title}
                               style={{ minHeight: 220, maxHeight: 220, objectFit: "cover" }}
                             />
-                            <div></div>
                             <div className="position-absolute top-0 start-0 w-100 h-100 rounded-3" style={{ backgroundColor: "rgba(0,0,0,0.6)" }}>
                               <img
                                 src={medals[index]}

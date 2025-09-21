@@ -47,23 +47,23 @@ const TopicComponent = (props: Topic) => {
     <>
       <Col className="d-flex flex-column bg-white rounded-3 p-0">
         <Card className="bg-dark text-white rounded-3 overflow-hidden">
-          <Card.Img src={props.image} alt="topic image" style={{ height: "11.3rem", objectFit: "cover" }} />
-          <Card.ImgOverlay className="d-flex flex-column justify-content-end" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+          <Card.Img src={props.image} alt="topic image" style={{ height: "15.3rem", objectFit: "cover" }} />
+          <Card.ImgOverlay className="d-flex flex-column justify-content-start" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
             <Card.Title className="fw-bold">{props.title}</Card.Title>
             <div className="badge mt-2 d-flex gap-1 align-self-start" style={{ backgroundColor: props.category?.color || "#6c757d" }}>
               <i className={"fa-solid fa-" + props.category?.icon}></i>
               {props.category?.name}
             </div>
-            <Card.Text className="mt-3 clamp-2">{props.description}</Card.Text>
-            {location.pathname === "/homepage" && hasWritten === false ? (
+            <Card.Text className="mt-3 clamp-2 flex-grow-1">{props.description}</Card.Text>
+            {onHomepage && hasWritten === false ? (
               <Button className="align-self-end fw-semibold text-white text-uppercase" variant="warning" onClick={() => navigate(`/create/${props.id}/essay`)}>
                 Write your essay
               </Button>
-            ) : (
+            ) : hasWritten ? (
               <Button className="align-self-end fw-semibold text-white text-uppercase" variant="warning" onClick={() => navigate(`/essays/${myEssayId}`)}>
                 View your essay
               </Button>
-            )}
+            ) : null}
           </Card.ImgOverlay>
         </Card>
       </Col>
