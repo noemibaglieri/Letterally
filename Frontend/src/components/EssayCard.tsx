@@ -23,7 +23,7 @@ const EssayCard = (essay: Essay) => {
             </p>
           </div>
           <Card.Title>{essay?.title}</Card.Title>
-          <Card.Text>{essay?.content.slice(0, 100) + "..."}</Card.Text>
+          <Card.Text dangerouslySetInnerHTML={{ __html: essay?.content.slice(0, 120) + "..." }}></Card.Text>
           <div className="d-flex gap-3 align-items-center">
             <img className="image-max-avatar" src={essay?.user?.avatar} alt="user avatar" width={40} />
             <div className="border-start ps-3">

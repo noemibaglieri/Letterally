@@ -53,7 +53,7 @@ const CategoryForm = () => {
   return (
     <Card className="shadow-sm border-0 rounded-3 p-4 flex-grow-1 h-100 w-100 justify-content-between">
       <div className="d-flex flex-column">
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} id="categoryForm">
           <Form.Group className="mb-3">
             <Form.Label>Name</Form.Label>
             <Form.Control type="text" placeholder="Enter category name" value={name} onChange={(e) => setName(e.target.value)} required />
@@ -89,7 +89,7 @@ const CategoryForm = () => {
           </div>
         </Form>
       </div>
-      <Button className="align-self-start fw-bold" type="submit" variant="info" disabled={loading}>
+      <Button className="align-self-start fw-bold" type="submit" form="categoryForm" variant="info" disabled={loading}>
         {loading ? <Spinner animation="border" size="sm" /> : "Create category"}
       </Button>
     </Card>

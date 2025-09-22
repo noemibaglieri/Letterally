@@ -22,7 +22,7 @@ const LandingPage = () => {
   const navigate = useNavigate();
 
   const getExampleEssay = async () => {
-    const response = await essayService.getLatestByCategoryId(1);
+    const response = await essayService.getLatestByCategoryId(2);
 
     if (response) {
       setEssay(response);
@@ -212,9 +212,7 @@ const LandingPage = () => {
                               })}
                           </span>
                         </p>
-                        <p>
-                          {essay?.content.slice(0, 200)} <span className="text-muted custom-fs">(...)</span>
-                        </p>
+                        <div dangerouslySetInnerHTML={{ __html: essay?.content.slice(0, 200) + "..." }}></div>
                       </div>
                     </Tab.Pane>
                     <Tab.Pane eventKey="1">
@@ -233,9 +231,7 @@ const LandingPage = () => {
                                 })}
                             </span>
                           </p>
-                          <p>
-                            {essay?.content.slice(0, 200)} <span className="text-muted custom-fs">(...)</span>
-                          </p>
+                          <p dangerouslySetInnerHTML={{ __html: essay?.content.slice(0, 200) + "..." }}></p>
                         </div>
                       </div>
                     </Tab.Pane>
@@ -255,9 +251,7 @@ const LandingPage = () => {
                                 })}
                             </span>
                           </p>
-                          <p>
-                            {essay?.content.slice(0, 200)} <span className="text-muted custom-fs">(...)</span>
-                          </p>
+                          <p dangerouslySetInnerHTML={{ __html: essay?.content.slice(0, 200) + "..." }}></p>
                         </div>
                       </div>
                     </Tab.Pane>
@@ -278,9 +272,7 @@ const LandingPage = () => {
                                 })}
                             </span>
                           </p>
-                          <p>
-                            {essay?.content.slice(0, 200)} <span className="text-muted custom-fs">(...)</span>
-                          </p>
+                          <p dangerouslySetInnerHTML={{ __html: essay?.content.slice(0, 200) + "..." }}></p>
                         </div>
                       </div>
                     </Tab.Pane>

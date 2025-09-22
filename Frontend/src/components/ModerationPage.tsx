@@ -159,9 +159,8 @@ const ModerationPage = () => {
                             WebkitBoxOrient: "vertical",
                             overflow: "hidden",
                           }}
-                        >
-                          {e.content}
-                        </p>
+                          dangerouslySetInnerHTML={{ __html: e.content }}
+                        ></p>
                       </Card.Body>
 
                       {/* Footer */}
@@ -219,7 +218,6 @@ const ModerationPage = () => {
                             </div>
                           </div>
 
-                          {/* rating pill (se hai il campo c.value) */}
                           {typeof c.value === "number" && <span className="badge rounded-pill bg-dark-subtle text-dark-emphasis">★ {c.value}</span>}
                         </div>
                       </Card.Header>

@@ -159,7 +159,7 @@ const HomePage = () => {
                 <EssayPlaceholder />
               ) : (
                 <>
-                  <div className="d-flex flex-row flex-nowrap overflow-auto gap-3 pb-2">
+                  <div className="d-flex flex-row flex-nowrap overflow-auto gap-3">
                     {items.map((e) => (
                       <div key={e.id} className="card shadow-sm rounded-3 border-0" style={{ minWidth: 520, maxWidth: 520 }}>
                         {e.image && (
@@ -227,6 +227,11 @@ const HomePage = () => {
                   )}
                 </>
               )}
+              {!loading && items.length === 0 && (
+                <div className="bg-white p-3 rounded-3">
+                  <p className="text-muted fst-italic">You haven't written any essays, yet. </p>
+                </div>
+              )}
             </Col>
 
             {/* READ & VOTE */}
@@ -239,8 +244,15 @@ const HomePage = () => {
                 <>
                   <div className="d-flex flex-row flex-nowrap overflow-auto gap-3">
                     {essaysToVote.map((e) => (
-                      <div key={e.id} className="card shadow-sm border-0" style={{ minWidth: 520, maxWidth: 520 }}>
-                        {e.image && <img src={e.image} className="card-img-top" alt={e.title} style={{ minHeight: 220, maxHeight: 220, objectFit: "cover" }} />}
+                      <div key={e.id} className="card shadow-sm rounded-3 border-0" style={{ minWidth: 520, maxWidth: 520 }}>
+                        {e.image && (
+                          <img
+                            src={e.image}
+                            className="card-img-top rounded-top-3"
+                            alt={e.title}
+                            style={{ minHeight: 220, maxHeight: 220, objectFit: "cover" }}
+                          />
+                        )}
                         <div className="card-body d-flex flex-column gap-2">
                           <div className="badge d-flex gap-1 align-self-start" style={{ backgroundColor: e.topic?.category?.color || "#6c757d" }}>
                             <i className={"fa-solid fa-" + e.topic?.category?.icon}></i>
@@ -300,7 +312,7 @@ const HomePage = () => {
 
                   return (
                     <Col md={4} key={e.id}>
-                      <div className="card shadow-sm border-0 position-relative">
+                      <div className="card rounded-3 shadow-sm border-0 position-relative h-100">
                         {e.image && (
                           <div className="position-relative rounded-top-3">
                             <img
@@ -329,8 +341,8 @@ const HomePage = () => {
                           <p className="card-text mb-3">
                             <div dangerouslySetInnerHTML={{ __html: e.content.slice(0, 120) }}></div>
                           </p>
-                          <div className="d-flex justify-content-between">
-                            <button className="btn btn-outline-primary btn-sm" onClick={() => navigate(`/essays/${e.id}`)}>
+                          <div className="d-flex justify-content-between align-items-end flex-grow-1">
+                            <button className="btn btn-outline-primary btn-sm " onClick={() => navigate(`/essays/${e.id}`)}>
                               View
                             </button>
                           </div>
