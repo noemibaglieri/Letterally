@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import type { Topic } from "../interfaces/Topic";
 import { toast } from "react-toastify";
 import SortedTopic from "./SortedTopic";
+import TopicPlaceholder from "./TopicPlaceholder";
+import SortedTopicPlaceholder from "./SortedTopicPlaceholder";
 
 const TopicsPage = () => {
   const [activeTopic, setActiveTopic] = useState<Topic | null>(null);
@@ -57,18 +59,41 @@ const TopicsPage = () => {
           <Row className="mx-auto gy-4 rounded-3">
             <Col md={12}>
               <h6 className="text-uppercase custom-fs">current topic</h6>
-              <Row className="mx-auto gap-3">{activeTopic ? <TopicComponent {...activeTopic} /> : <p>Loading user...</p>}</Row>
+              <Row className="mx-auto gap-3">{activeTopic ? <TopicComponent {...activeTopic} /> : <TopicPlaceholder />}</Row>
             </Col>
             <Col md={12}>
-              <h6 className="text-uppercase custom-fs">
-                {" "}
-                <strong>{past.length}</strong> Past topics
-              </h6>
+              {past.length ? (
+                <h6 className="text-uppercase custom-fs">
+                  <strong>{past.length}</strong> Past topics
+                </h6>
+              ) : (
+                <h6 className="text-uppercase custom-fs">Past topics</h6>
+              )}
+
               <Row className="gx-3 gy-3">
                 {loading ? (
                   <Spinner animation="border" />
                 ) : past.length === 0 ? (
-                  <div className="text-muted small">No past topics</div>
+                  <>
+                    <Col md={6}>
+                      <SortedTopicPlaceholder />
+                    </Col>
+                    <Col md={6}>
+                      <SortedTopicPlaceholder />
+                    </Col>
+                    <Col md={6}>
+                      <SortedTopicPlaceholder />
+                    </Col>
+                    <Col md={6}>
+                      <SortedTopicPlaceholder />
+                    </Col>
+                    <Col md={6}>
+                      <SortedTopicPlaceholder />
+                    </Col>
+                    <Col md={6}>
+                      <SortedTopicPlaceholder />
+                    </Col>
+                  </>
                 ) : (
                   past.map((t) => (
                     <Col md={6} key={t.id}>

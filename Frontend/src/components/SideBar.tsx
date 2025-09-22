@@ -149,15 +149,22 @@ const MenuContent = ({ locationPath, user, loggingOut, isAdmin, onLogout, showLo
 
     <div>
       {loggingOut && <p className="text-white small mt-2">Logging out...</p>}
-      <div className="d-flex sidebar-link gap-2 align-items-center">
-        <img src={user?.avatar} alt="logged in user avatar" style={{ objectFit: "cover", borderRadius: "50%", width: "40px", height: "40px" }} />
-        <p className="mb-0 text-capitalize">{user?.username}</p>
-        {isAdmin && (
-          <Badge pill className="admin-color">
-            {user?.roleName}
-          </Badge>
-        )}
-      </div>
+      {user ? (
+        <div className="d-flex sidebar-link gap-2 align-items-center">
+          <img src={user?.avatar} alt="logged in user avatar" style={{ objectFit: "cover", borderRadius: "50%", width: "40px", height: "40px" }} />
+          <p className="mb-0 text-capitalize">{user?.username}</p>
+          {isAdmin && (
+            <Badge pill className="admin-color">
+              {user?.roleName}
+            </Badge>
+          )}
+        </div>
+      ) : (
+        <div className="d-flex sidebar-link gap-2 align-items-center">
+          <img src={user?.avatar} alt="logged in user avatar" style={{ objectFit: "cover", borderRadius: "50%", width: "40px", height: "40px" }} />
+          <p className="mb-0 text-capitalize">Logged user</p>
+        </div>
+      )}
       <Link to="#" onClick={onLogout} className="sidebar-link d-flex align-items-center gap-2">
         <FontAwesomeIcon icon={faRightFromBracket} /> Logout
       </Link>

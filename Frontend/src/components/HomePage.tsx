@@ -9,6 +9,8 @@ import type { EssayResponse } from "../interfaces/Essay";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import EssayPlaceholder from "./EssayPlaceholder";
+import TopicPlaceholder from "./TopicPlaceholder";
 
 const HomePage = () => {
   // Topic state
@@ -146,15 +148,15 @@ const HomePage = () => {
           <Row className="mx-auto gy-4 rounded-3">
             <Col md={12}>
               <h6 className="text-uppercase custom-fs">Welcome back</h6>
-              <Row className="mx-auto gap-3">{activeTopic ? <TopicComponent {...activeTopic} /> : <p>Loading user...</p>}</Row>
+              <Row className="mx-auto gap-3">{activeTopic ? <TopicComponent {...activeTopic} /> : <TopicPlaceholder />}</Row>
             </Col>
 
             {/* MY ESSAYS */}
             <Col md={12} className="px-3">
               <h6 className="text-uppercase custom-fs">My essays</h6>
 
-              {items.length === 0 && !loading ? (
-                <p className="text-muted fst-italic mb-0">You haven’t written any essays yet.</p>
+              {items.length === 0 && loading ? (
+                <EssayPlaceholder />
               ) : (
                 <>
                   <div className="d-flex flex-row flex-nowrap overflow-auto gap-3 pb-2">
@@ -235,7 +237,7 @@ const HomePage = () => {
                 <p className="text-muted fst-italic mb-0">You voted all the available essays! Yay! Let's wait for more...</p>
               ) : (
                 <>
-                  <div className="d-flex flex-row flex-nowrap overflow-auto gap-3 pb-2">
+                  <div className="d-flex flex-row flex-nowrap overflow-auto gap-3">
                     {essaysToVote.map((e) => (
                       <div key={e.id} className="card shadow-sm border-0" style={{ minWidth: 520, maxWidth: 520 }}>
                         {e.image && <img src={e.image} className="card-img-top" alt={e.title} style={{ minHeight: 220, maxHeight: 220, objectFit: "cover" }} />}
@@ -268,19 +270,28 @@ const HomePage = () => {
                   </div>
 
                   {loading && essaysToVote.length === 0 && (
-                    <div className="text-center py-4">
-                      <Spinner animation="border" />
+                    <div className="d-flex gap-3">
+                      <EssayPlaceholder />
+                      <EssayPlaceholder />
+                      <EssayPlaceholder />
+                      <EssayPlaceholder />
                     </div>
                   )}
                 </>
               )}
             </Col>
 
-            {top3.length === 0 && !loading && <p className="text-muted fst-italic mb-0">No essays this week...</p>}
-
             {/* WEEKLY TOP 3 */}
             <Col md={12} className="px-3">
               <h6 className="text-uppercase custom-fs">Weekly top 3</h6>
+              {top3.length === 0 && loading && (
+                <div className="d-flex gap-3">
+                  <EssayPlaceholder />
+                  <EssayPlaceholder />
+                  <EssayPlaceholder />
+                  <EssayPlaceholder />
+                </div>
+              )}
               <Row className="d-flex flex-row">
                 {top3.map((e, index) => {
                   const medals = ["../src/assets/first-place.png", "../src/assets/second-place.png", "../src/assets/third-place.png"];
@@ -325,12 +336,6 @@ const HomePage = () => {
                           </div>
                         </div>
                       </div>
-
-                      {loading && items.length === 0 && (
-                        <div className="text-center py-4">
-                          <Spinner animation="border" />
-                        </div>
-                      )}
                     </Col>
                   );
                 })}
