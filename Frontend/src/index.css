@@ -209,6 +209,12 @@ a:hover {
   text-decoration: none !important;
 }
 
+.sidebar-link-user:hover {
+  background-color: unset !important;
+  font-weight: unset !important;
+  color: inherit !important;
+}
+
 .custom-gap-1rem {
   column-gap: 1rem;
 }

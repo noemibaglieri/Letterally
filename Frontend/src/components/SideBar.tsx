@@ -147,10 +147,10 @@ const MenuContent = ({ locationPath, user, loggingOut, isAdmin, onLogout, showLo
       )}
     </div>
 
-    <div>
+    <div className="d-flex flex-column gap-2">
       {loggingOut && <p className="text-white small mt-2">Logging out...</p>}
       {user ? (
-        <div className="d-flex sidebar-link gap-2 align-items-center">
+        <div className="d-flex sidebar-link sidebar-link-user gap-2 align-items-center">
           <img src={user?.avatar} alt="logged in user avatar" style={{ objectFit: "cover", borderRadius: "50%", width: "40px", height: "40px" }} />
           <p className="mb-0 text-capitalize">{user?.username}</p>
           {isAdmin && (
@@ -160,8 +160,12 @@ const MenuContent = ({ locationPath, user, loggingOut, isAdmin, onLogout, showLo
           )}
         </div>
       ) : (
-        <div className="d-flex sidebar-link gap-2 align-items-center">
-          <img src={user?.avatar} alt="logged in user avatar" style={{ objectFit: "cover", borderRadius: "50%", width: "40px", height: "40px" }} />
+        <div className="d-flex sidebar-link sidebar-link-user gap-2 align-items-center">
+          <img
+            src="https://ui-avatars.com/api/?name=lu"
+            alt="logged in user avatar"
+            style={{ objectFit: "cover", borderRadius: "50%", width: "40px", height: "40px" }}
+          />
           <p className="mb-0 text-capitalize">Logged user</p>
         </div>
       )}
