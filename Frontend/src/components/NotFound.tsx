@@ -12,7 +12,10 @@ const NotFound = () => {
               <img src="../src/assets/letterally-not-found.png" alt="letterally logo" width={200} />
             </div>
             <h3 className="fw-semibold mt-3">Looks like you're lost in space. What were you looking for?</h3>
-            <img src="../src/assets/404.gif" alt="404 Not Found" />
+            <div className="w-75 overflow-hidden">
+              <img src="../src/assets/404.gif" alt="404 Not Found" style={{ width: "100%" }} />
+            </div>
+
             <Button
               variant="info"
               className="fw-bold"

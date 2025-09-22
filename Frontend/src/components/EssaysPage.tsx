@@ -12,7 +12,9 @@ const EssaysPageUnderConstruction = () => {
               <img src="../src/assets/letterally-not-found.png" alt="letterally logo" width={200} />
             </div>
             <h3 className="fw-semibold mt-3">Currently under heavy development by very tiny coding gnomes.</h3>
-            <img src="../src/assets/work-in-progress.gif" alt="Working on it" />
+            <div className="w-75 overflow-hidden">
+              <img src="../src/assets/work-in-progress.gif" style={{ width: "100%" }} alt="Working on it" />
+            </div>
             <Button
               variant="info"
               className="fw-bold"
