@@ -14,6 +14,8 @@ import TopicsPage from "./components/TopicsPage";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import Forbidden from "./components/Forbidden";
 import NotFound from "./components/NotFound";
+import StatsPage from "./components/StatsPage";
+import EssaysPageUnderConstruction from "./components/EssaysPage";
 
 function App() {
   return (
@@ -29,6 +31,7 @@ function App() {
           {/* Auth-required (USER) */}
           <Route element={<ProtectedRoute allowedRoles={["USER"]} requiredAuth={true} />}>
             <Route path="homepage" element={<HomePage />} />
+            <Route path="essays" element={<EssaysPageUnderConstruction />} />
             <Route path="essays/:id" element={<EssayPage />} />
             <Route path="topics" element={<TopicsPage />} />
             <Route path="edit/:topicId/essay/:essayId" element={<WritingPage />} />
@@ -39,6 +42,7 @@ function App() {
           <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} requiredAuth={true} />}>
             <Route path="backoffice" element={<BackofficePage />} />
             <Route path="moderation" element={<ModerationPage />} />
+            <Route path="stats" element={<StatsPage />} />
           </Route>
 
           {/* Errors */}

@@ -1,7 +1,7 @@
 import { Badge, Nav, Offcanvas, Button } from "react-bootstrap";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBan, faBookOpen, faHouse, faRightFromBracket, faScrewdriverWrench, faTableCellsLarge } from "@fortawesome/free-solid-svg-icons";
+import { faBan, faBookOpen, faChartSimple, faHouse, faRightFromBracket, faScrewdriverWrench, faTableCellsLarge } from "@fortawesome/free-solid-svg-icons";
 import logo from "../assets/letterally_nav.png";
 import { StorageService } from "../services/storage.service";
 import { useEffect, useState } from "react";
@@ -135,6 +135,11 @@ const MenuContent = ({ locationPath, user, loggingOut, isAdmin, onLogout, showLo
             <Nav.Item>
               <Link to="/moderation" className={`sidebar-link d-flex align-items-center gap-2 ${locationPath === "/moderation" ? "active" : ""}`}>
                 <FontAwesomeIcon icon={faBan} /> Moderation
+              </Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Link to="/stats" className={`sidebar-link d-flex align-items-center gap-2 ${locationPath === "/stats" ? "active" : ""}`}>
+                <FontAwesomeIcon icon={faChartSimple} /> Stats
               </Link>
             </Nav.Item>
           </Nav>
