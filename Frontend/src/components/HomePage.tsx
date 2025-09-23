@@ -38,6 +38,7 @@ const HomePage = () => {
   const [loading, setLoading] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [essayToDelete, setEssayToDelete] = useState<number | null>(null);
+
   const navigate = useNavigate();
 
   const essayService = new EssayService();

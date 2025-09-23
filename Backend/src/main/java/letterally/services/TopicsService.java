@@ -66,28 +66,53 @@ public class TopicsService {
         Topic found = this.topicsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Topic id * " + id + " * not found"));
 
-        if (payload.title() != null && !payload.title().isBlank()) {
-            found.setTitle(payload.title().trim());
+        boolean changed = false;
+
+        if (payload.title() != null) {
+            String newTitle = payload.title().trim();
+            if (newTitle.isBlank()) throw new BadRequestException("Title must not be blank");
+            found.setTitle(newTitle);
+            changed = true;
         }
 
-        if (payload.description() != null && !payload.description().isBlank()) {
-            found.setDescription(payload.description().trim());
+        if (payload.description() != null) {
+            String newDesc = payload.description().trim();
+            if (newDesc.isBlank()) throw new BadRequestException("Description must not be blank");
+            found.setDescription(newDesc);
+            changed = true;
         }
 
         if (payload.startDate() != null) {
             found.setStartDate(payload.startDate());
+            changed = true;
         }
 
         if (payload.categoryId() != null) {
             Category category = this.categoriesRepository.findById(payload.categoryId())
                     .orElseThrow(() -> new NotFoundException("Category id * " + payload.categoryId() + " * not found"));
             found.setCategory(category);
+            changed = true;
         }
 
-        if (payload.image() != null) {
-            String img = payload.image().trim();
-            found.setImage(img.isBlank() ? null : img);
+        if (payload.image() != null && !payload.image().isEmpty()) {
+            try {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> uploadRes = (Map<String, Object>) cloudinary.uploader()
+                        .upload(payload.image().getBytes(), ObjectUtils.emptyMap());
+
+                String uploadedUrl = (String) uploadRes.get("url");
+                if (uploadedUrl == null || uploadedUrl.isBlank()) {
+                    throw new BadRequestException("Image upload failed: empty URL returned");
+                }
+                found.setImage(uploadedUrl);
+                changed = true;
+
+            } catch (IOException ex) {
+                throw new BadRequestException("Image upload failed");
+            }
         }
+
+        if (!changed) return found;
 
         return this.topicsRepository.save(found);
     }

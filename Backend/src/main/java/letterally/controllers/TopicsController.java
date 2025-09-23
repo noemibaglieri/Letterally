@@ -7,6 +7,7 @@ import letterally.exceptions.BadRequestException;
 import letterally.exceptions.ValidationException;
 import letterally.payloads.NewEssayDTO;
 import letterally.payloads.NewTopicDTO;
+import letterally.payloads.UpdateEssayDTO;
 import letterally.payloads.UpdateTopicDTO;
 import letterally.services.TopicsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +51,13 @@ public class TopicsController {
         return this.topicsService.save(payload);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = "multipart/form-data")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Topic update(@PathVariable Long id, @RequestBody @Validated UpdateTopicDTO payload) {
+    public Topic update(@PathVariable Long id, @Validated @ModelAttribute UpdateTopicDTO payload, BindingResult validationResult) {
+        if (validationResult.hasErrors()) {
+            throw new ValidationException(validationResult.getFieldErrors()
+                    .stream().map(e -> e.getDefaultMessage()).toList());
+        }
         return this.topicsService.update(id, payload);
     }
 

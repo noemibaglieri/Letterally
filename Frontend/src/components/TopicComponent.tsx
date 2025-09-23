@@ -60,7 +60,7 @@ const TopicComponent = (props: Topic) => {
                 Write your essay
               </Button>
             ) : hasWritten ? (
-              <Button className="align-self-end fw-semibold text-white text-uppercase" variant="warning" onClick={() => navigate(`/essays/${myEssayId}`)}>
+              <Button className="align-self-end fw-semibold text-white text-uppercase" variant="success" onClick={() => navigate(`/essays/${myEssayId}`)}>
                 View your essay
               </Button>
             ) : null}

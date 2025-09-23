@@ -90,7 +90,6 @@ const FeedbackForm = ({ essayId, onPost }: Props) => {
             value={value}
             onChange={(e) => {
               const v = e.target.value;
-              // allow empty to clear field; otherwise store a number
               setValue(v === "" ? "" : Number(v));
             }}
             isInvalid={!!errors.value}

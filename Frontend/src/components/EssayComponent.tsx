@@ -18,7 +18,6 @@ const EssayComponent = (props: { essay: EssayResponse; feedbackCount: number | n
   useEffect(() => {
     setIsOwner(props.essay.user?.id === currentUser?.id);
     setIsAdmin(currentUser!.roleName === "ADMIN");
-    console.log(currentUser);
   }, []);
 
   const renderContent = () => {
@@ -63,7 +62,7 @@ const EssayComponent = (props: { essay: EssayResponse; feedbackCount: number | n
                   <div className="d-flex flex-column align-self-center">
                     {props.feedbackCount != 0 && (
                       <p className="badge rounded-3 ps-3 pe-3 bg-white align-self-start">
-                        <span className="fw-bold secondary fs-1">{props.feedbackCount}</span>
+                        <span className="fw-bold secondary fs-1">{props.feedbackCount?.toFixed(1)}</span>
                         <span className="fw-normal text-muted">&nbsp;/ 10</span>
                       </p>
                     )}

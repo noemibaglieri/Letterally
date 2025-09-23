@@ -10,6 +10,7 @@ import SortedTopic from "./SortedTopic";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 
 const BackofficePage = () => {
+  const [active, setActive] = useState<Topic | null>(null);
   const [upcoming, setUpcoming] = useState<Topic[]>([]);
   const [past, setPast] = useState<Topic[]>([]);
   const [loading, setLoading] = useState(true);
@@ -17,6 +18,22 @@ const BackofficePage = () => {
   const topicService = new TopicService();
   const [modalTopic, setModalTopic] = useState<Topic | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [categoriesRefreshKey, setCategoriesRefreshKey] = useState(0);
+
+  const getActiveTopic = async () => {
+    const topicService = new TopicService();
+    const response = await topicService.getActiveTopic();
+
+    if (response) {
+      setActive(response);
+    } else {
+      setActive(null);
+    }
+  };
+
+  useEffect(() => {
+    getActiveTopic();
+  }, []);
 
   const loadTopics = async () => {
     try {
@@ -40,7 +57,7 @@ const BackofficePage = () => {
   };
 
   const askDelete = (id: number) => {
-    const t = [...upcoming, ...past].find((x) => x.id === id) || null;
+    const t = (active && active.id === id ? active : null) || upcoming.find((x) => x.id === id) || past.find((x) => x.id === id) || null;
     setModalTopic(t);
   };
 
@@ -51,11 +68,16 @@ const BackofficePage = () => {
     setDeleting(false);
     if (ok) {
       setModalTopic(null);
-      await loadTopics();
+      setLoading(true);
+      await Promise.all([loadTopics(), getActiveTopic()]);
+      setLoading(false);
     }
   };
+
   useEffect(() => {
-    loadTopics();
+    (async () => {
+      await Promise.all([getActiveTopic(), loadTopics()]);
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -69,18 +91,46 @@ const BackofficePage = () => {
             <Row className="mx-auto gap-3">
               <TopicForm
                 editingTopic={editingTopic}
-                onSaved={() => {
+                onSaved={async () => {
                   setEditingTopic(null);
-                  loadTopics();
+                  setLoading(true);
+                  await Promise.all([loadTopics(), getActiveTopic()]);
+                  setLoading(false);
                 }}
                 onCancelEdit={() => setEditingTopic(null)}
+                categoriesRefreshKey={categoriesRefreshKey}
               />
             </Row>
           </Col>
           <Col md={6} className="d-flex flex-column">
             <h6 className="text-uppercase custom-fs">Create new category</h6>
             <Row className="mx-auto gap-3 h-100 w-100">
-              <CategoryForm />
+              <CategoryForm
+                onCreated={() => {
+                  toast.success("Category created");
+                  setCategoriesRefreshKey((k) => k + 1);
+                }}
+              />
+            </Row>
+          </Col>
+          <Col md={12}>
+            <h6 className="text-uppercase custom-fs">Active topic</h6>
+            <Row className="gx-3 gy-3">
+              {loading ? (
+                <Spinner animation="border" />
+              ) : !active ? (
+                <div className="text-muted small">No active topic</div>
+              ) : (
+                <Col md={12}>
+                  <SortedTopic
+                    topic={active}
+                    onEdit={(id) => {
+                      if (active && active.id === id) setEditingTopic(active);
+                    }}
+                    onDelete={askDelete}
+                  />
+                </Col>
+              )}
             </Row>
           </Col>
           <Col md={12}>

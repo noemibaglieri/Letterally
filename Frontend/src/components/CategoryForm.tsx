@@ -5,7 +5,11 @@ import type { Category } from "../interfaces/Category";
 import { Constants } from "../constants";
 import { StorageService } from "../services/storage.service";
 
-const CategoryForm = () => {
+type Props = {
+  onCreated?: () => void;
+};
+
+const CategoryForm = ({ onCreated }: Props) => {
   const [name, setName] = useState("");
   const [color, setColor] = useState("#6c757d");
   const [icon, setIcon] = useState("book");
@@ -37,7 +41,8 @@ const CategoryForm = () => {
       }
 
       await res.json();
-      toast.success("Category created!");
+
+      onCreated?.();
 
       setName("");
       setColor("#6c757d");
@@ -68,7 +73,7 @@ const CategoryForm = () => {
             <Form.Label>Icon (FontAwesome)</Form.Label>
             <Form.Control type="text" placeholder="e.g. book, flask, brain" value={icon} onChange={(e) => setIcon(e.target.value)} />
             <Form.Text className="text-muted custom-fs">
-              Use the icon name without <code>fa-</code> (e.g. <code>book</code>).{" "}
+              Use the icon name without <code>fa-</code> (e.g. <code>book</code>).
               <p>
                 You can browse all available icons on the{" "}
                 <a href="https://fontawesome.com/icons" target="_blank" rel="noopener noreferrer">
@@ -89,6 +94,7 @@ const CategoryForm = () => {
           </div>
         </Form>
       </div>
+
       <Button className="align-self-start fw-bold" type="submit" form="categoryForm" variant="info" disabled={loading}>
         {loading ? <Spinner animation="border" size="sm" /> : "Create category"}
       </Button>

@@ -107,8 +107,8 @@ const EssayPage = () => {
           <Row className="mx-auto gy-4 px-2 px-md-0">
             <Col xs={12} md={3} className="p-0 order-2 order-md-1">
               <Row className="mx-auto gy-4">
-                <Col xs={12} className="px-3">
-                  <h6 className="text-uppercase custom-fs">The author</h6>
+                <Col xs={12} className="px-3 ">
+                  <h6 className="text-uppercase custom-fs ">The author</h6>
                   <div className="rounded-3 bg-white">
                     {user ? <UserCard {...{ user: user, feedbackCount: avgVotes, essayCount: essayCount }} /> : <p>Loading user...</p>}
                   </div>
@@ -144,9 +144,9 @@ const EssayPage = () => {
                   <div>
                     <h6 className="text-uppercase custom-fs">Thoughts from readers</h6>
                     {feedback.length > 0 ? (
-                      feedback.map((feedback) => (
-                        <div key={feedback.id} className="rounded-3 last-child bg-white p-3">
-                          <FeedbackCard {...feedback} />
+                      feedback.map((f) => (
+                        <div key={f.id} className="rounded-3 last-child bg-white p-3">
+                          <FeedbackCard {...f} onDeleted={(id) => setFeedback((prev) => prev.filter((x) => x.id !== id))} />
                         </div>
                       ))
                     ) : (
