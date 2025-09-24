@@ -145,7 +145,7 @@ const HomePage = () => {
     <>
       <div className="d-lg-flex rounded-3">
         <SideBar />
-        <div className="mt-3 mb-3 w-100 overflow-custom overflow-scroll rounded-3 let-max-height">
+        <div className="mt-3 mb-3 w-100 rounded-3 overflow-custom overflow-scroll rounded-3 let-max-height">
           <Row className="mx-auto gy-4 rounded-3">
             <Col md={12}>
               <h6 className="text-uppercase custom-fs">Welcome back</h6>

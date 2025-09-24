@@ -32,6 +32,7 @@ const WritingPage = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [save, setSave] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const essayService = useMemo(() => new EssayService(), []);
   const topicService = useMemo(() => new TopicService(), []);
@@ -136,6 +137,7 @@ const WritingPage = () => {
     }
   };
 
+  // preload essay when editing
   useEffect(() => {
     const essayId = params.essayId ? parseInt(params.essayId, 10) : null;
     if (!essayId) return;
@@ -146,6 +148,7 @@ const WritingPage = () => {
         setEssay(res);
         setTitle(res.title ?? "");
         setContent(res.content ?? "");
+        if (res.imageFile) setImagePreview(res.imageFile);
       }
     })();
   }, [params.essayId, essayService]);
@@ -155,100 +158,142 @@ const WritingPage = () => {
     getAllEssaysByTopicId();
   }, []);
 
+  useEffect(() => {
+    if (!imageFile) return;
+    const url = URL.createObjectURL(imageFile);
+    setImagePreview(url);
+    return () => URL.revokeObjectURL(url);
+  }, [imageFile]);
+
   return (
     <div className="d-lg-flex">
       <SideBar />
       <div className="let-max-height mt-3 mb-3 rounded-3 w-100 overflow-hidden overflow-scroll">
         <Row className="mx-auto gy-4">
           <Col md={8} className="px-0">
-            <div className="ps-3 mx-auto gy-4 h-100 ">
-              <h5 className="text-uppercase custom-fs">{isEdit ? "Edit your essay" : "Create a new essay"}</h5>
-              <div className="rounded-3 bg-white">
-                <div className="p-3">
-                  {success && <div className="alert alert-success mt-2">{isEdit ? "Essay updated successfully!" : "Essay created successfully!"}</div>}
+            <Row className="gy-4">
+              <Col md={12}>
+                <div className="ps-3 mx-auto gy-4 h-100 ">
+                  <h5 className="text-uppercase custom-fs">{isEdit ? "Edit your essay" : "Create a new essay"}</h5>
+                  <div className="rounded-3 bg-white shadow-sm">
+                    <div className="p-3">
+                      {success && <div className="alert alert-success mt-2">{isEdit ? "Essay updated successfully!" : "Essay created successfully!"}</div>}
 
-                  <Form noValidate onSubmit={savePost}>
-                    <Row className="mb-3">
-                      <Form.Group as={Col} controlId="essayTitle">
-                        <Form.Label>Title</Form.Label>
-                        <Form.Control
-                          value={title}
-                          onChange={(e) => setTitle(e.target.value)}
-                          isInvalid={!!errors.title}
-                          placeholder="Give your essay a title…"
-                        />
-                        <Form.Control.Feedback type="invalid">{errors.title}</Form.Control.Feedback>
-                      </Form.Group>
+                      <Form noValidate onSubmit={savePost}>
+                        <Row className="mb-3">
+                          <Form.Group as={Col} controlId="essayTitle">
+                            <Form.Label>Title</Form.Label>
+                            <Form.Control
+                              value={title}
+                              onChange={(e) => setTitle(e.target.value)}
+                              isInvalid={!!errors.title}
+                              placeholder="Give your essay a title…"
+                            />
+                            <Form.Control.Feedback type="invalid">{errors.title}</Form.Control.Feedback>
+                          </Form.Group>
 
-                      <Form.Group as={Col} className="mb-3" controlId="essayImage">
-                        <Form.Label>Cover image</Form.Label>
-                        <Form.Control
-                          type="file"
-                          accept="image/*"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            const f = e.target.files?.[0] ?? null;
-                            setImageFile(f);
-                          }}
-                          isInvalid={!!errors.imageFile}
-                        />
-                        <Form.Control.Feedback type="invalid">{errors.imageFile}</Form.Control.Feedback>
-                      </Form.Group>
-                    </Row>
+                          <Form.Group as={Col} className="mb-3" controlId="essayImage">
+                            <Form.Label>Cover image</Form.Label>
+                            <Form.Control
+                              type="file"
+                              accept="image/*"
+                              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                const f = e.target.files?.[0] ?? null;
+                                setImageFile(f);
+                              }}
+                              isInvalid={!!errors.imageFile}
+                            />
+                            <Form.Control.Feedback type="invalid">{errors.imageFile}</Form.Control.Feedback>
+                          </Form.Group>
+                        </Row>
 
-                    <Row>
-                      <Form.Label as={Col}>Type your thoughts</Form.Label>
+                        <Row>
+                          <Form.Label as={Col}>Type your thoughts</Form.Label>
 
-                      <Col className="text-end d-flex justify-content-end gap-2 mb-2">
-                        <Button variant="outline-primary" className="pt-0 pb-0" size="sm" disabled={loading} onClick={() => setSave(false)} type="button">
-                          {loading ? <Spinner size="sm" animation="border" className="me-2" /> : null}
-                          Save draft
-                        </Button>
-                        <Button
-                          variant={isEdit ? "info" : "success"}
-                          size="sm"
-                          disabled={loading}
-                          className="pt-0 pb-0"
-                          type="submit"
-                          onClick={() => setSave(true)}
-                        >
-                          {loading ? <Spinner size="sm" animation="border" className="me-2" /> : null}
-                          {isEdit ? "Edit" : "Create"}
-                        </Button>
-                      </Col>
-                    </Row>
+                          <Col className="text-end d-flex justify-content-end gap-2 mb-2">
+                            <Button variant="outline-primary" className="pt-0 pb-0" disabled={loading} onClick={() => setSave(false)} type="button">
+                              {loading ? <Spinner size="sm" animation="border" className="me-2" /> : null}
+                              Save draft
+                            </Button>
+                            <Button variant="info" disabled={loading} className="pt-0 pb-0 fw-bold" type="submit" onClick={() => setSave(true)}>
+                              {loading ? <Spinner size="sm" animation="border" className="me-2" /> : null}
+                              {isEdit ? "Edit" : "Create"}
+                            </Button>
+                          </Col>
+                        </Row>
 
-                    <Form.Group className="editor-box flex-grow-1 min-h-0">
-                      {errors.content ? <div className="invalid-feedback d-block">{errors.content}</div> : null}
+                        <Form.Group className="editor-box flex-grow-1 min-h-0">
+                          {errors.content ? <div className="invalid-feedback d-block">{errors.content}</div> : null}
 
-                      <div className={`rounded-3 ${errors.content ? "is-invalid border border-danger" : ""}`}>
-                        <ReactQuill
-                          className="quill-editor"
-                          theme="snow"
-                          value={content}
-                          onChange={(value) => setContent(value)}
-                          modules={quillModules}
-                          formats={quillFormats}
-                          placeholder="Write your essay here…"
-                        />
-                      </div>
-                    </Form.Group>
-                  </Form>
+                          <div className={`rounded-3 ${errors.content ? "is-invalid border border-danger" : ""}`}>
+                            <ReactQuill
+                              className="quill-editor"
+                              theme="snow"
+                              value={content}
+                              onChange={(value) => setContent(value)}
+                              modules={quillModules}
+                              formats={quillFormats}
+                              placeholder="Write your essay here…"
+                            />
+                          </div>
+                        </Form.Group>
+                      </Form>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </Col>
+              <Col md={12}>
+                <div className="ps-3 mx-auto gy-4 h-100 ">
+                  <h6 className="text-uppercase custom-fs">Preview</h6>
+                  <div className="card shadow-sm border-0 rounded-3 overflow-hidden">
+                    {imagePreview && (
+                      <img
+                        src={imagePreview}
+                        alt="cover preview"
+                        className="card-img-top rounded-top-3"
+                        style={{ minHeight: 320, maxHeight: 320, objectFit: "cover" }}
+                      />
+                    )}
+
+                    <div className="card-body d-flex flex-column gap-2">
+                      {topic?.category && (
+                        <span
+                          className="badge d-inline-flex align-items-center gap-1 align-self-start"
+                          style={{ backgroundColor: topic.category.color || "#6c757d" }}
+                        >
+                          <i className={`fa-solid fa-${topic.category.icon}`} />
+                          {topic.category.name}
+                        </span>
+                      )}
+
+                      <h5 className="card-title mb-1">{title || "Untitled"}</h5>
+                      <small className="text-muted d-block mb-2">{new Date().toLocaleDateString()}</small>
+
+                      <div className="card-text mb-2">
+                        {stripHtml(content).length ? (
+                          <div dangerouslySetInnerHTML={{ __html: content }} />
+                        ) : (
+                          <span className="text-muted">Start typing to see the preview…</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Col>
+            </Row>
           </Col>
 
           <Col md={4} className="p-0 overflow-custom">
             <Row className="mx-auto gy-4 overflow-custom-child">
               <Col md={12} className="px-3">
                 <h6 className="text-uppercase custom-fs">The topic</h6>
-                <div className="rounded-3 main-bg-dark text-white">{topic ? <TopicComponent {...topic} /> : <p>Loading topic...</p>}</div>
+                <div className="rounded-3 main-bg-dark text-white shadow-sm">{topic ? <TopicComponent {...topic} /> : <p>Loading topic...</p>}</div>
               </Col>
               <Col md={12} className="px-3">
                 <h6 className="text-uppercase custom-fs">More essays on this topic</h6>
                 {essaysByTopicId.length > 0 ? (
                   essaysByTopicId.map((essay) => (
-                    <div key={essay.id} className="rounded-3 bg-white last-child">
+                    <div key={essay.id} className="rounded-3 bg-white last-child shadow-sm">
                       {essay ? <EssayCard {...essay} /> : <p className="text-muted fst-italic">There aren't any more essays on this topic, yet.</p>}
                     </div>
                   ))
