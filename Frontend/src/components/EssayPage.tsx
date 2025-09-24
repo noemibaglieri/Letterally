@@ -70,7 +70,8 @@ const EssayPage = () => {
 
   const getOverallAvgVotes = async () => {
     const response = await feedbackService.getAvgByAuthor(essay!.user!.id!);
-    if (response) setAvgVotes(response!);
+
+    setAvgVotes(response!);
   };
 
   const getOverallAvgEssayVotes = async () => {

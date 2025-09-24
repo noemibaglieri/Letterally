@@ -21,7 +21,7 @@ const UserCard = (props: { user: User; feedbackCount: number | null; essayCount:
           </Col>
           <Col className="text-end">
             <div>Avg votes</div>
-            <div className="fs-5 text-dark fw-semibold">{props.feedbackCount?.toFixed(1)}</div>
+            <div className="fs-5 text-dark fw-semibold">{props.feedbackCount ? props.feedbackCount?.toFixed(1) : "N/A"}</div>
           </Col>
         </Row>
 

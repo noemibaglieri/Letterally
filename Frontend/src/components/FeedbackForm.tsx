@@ -113,7 +113,7 @@ const FeedbackForm = ({ essayId, onPost }: Props) => {
           <Form.Control.Feedback type="invalid">{errors.content}</Form.Control.Feedback>
         </Form.Group>
 
-        <Button type="submit" variant="primary" disabled={loading || essayId == null}>
+        <Button className="fw-bold" type="submit" variant="info" disabled={loading || essayId == null}>
           {loading ? (
             <>
               <Spinner as="span" animation="border" size="sm" className="me-2" /> Submitting…
