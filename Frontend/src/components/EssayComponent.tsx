@@ -26,9 +26,7 @@ const EssayComponent = (props: { essay: EssayResponse; feedbackCount: number | n
     if (isExpanded || props.essay.content.length <= maxChars) {
       return (
         <>
-          <p className="card-text mb-3">
-            <div dangerouslySetInnerHTML={{ __html: props.essay.content }}></div>
-          </p>
+          <p className="card-text mb-3" dangerouslySetInnerHTML={{ __html: props.essay.content }}></p>
           {props.essay.content.length > maxChars && (
             <a onClick={toggleReadMore} className="fw-bold ms-2" style={{ cursor: "pointer" }}>
               Read less
@@ -39,9 +37,7 @@ const EssayComponent = (props: { essay: EssayResponse; feedbackCount: number | n
     } else {
       return (
         <>
-          <p className="card-text mb-3">
-            <div dangerouslySetInnerHTML={{ __html: props.essay.content.slice(0, maxChars) + "..." }}></div>
-          </p>
+          <p dangerouslySetInnerHTML={{ __html: props.essay.content.slice(0, maxChars) + "..." }} className="card-text mb-3"></p>
 
           <a onClick={toggleReadMore} className="fw-bold ms-2">
             Read more
@@ -93,7 +89,7 @@ const EssayComponent = (props: { essay: EssayResponse; feedbackCount: number | n
                 <FontAwesomeIcon icon={faPencil} /> Edit
               </Button>
             )}
-            <Card.Text>{renderContent()}</Card.Text>
+            {renderContent()}
           </Card.Body>
         </Card>
       </div>

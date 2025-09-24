@@ -178,9 +178,7 @@ const HomePage = () => {
                           </div>
                           <h6 className="card-title mb-1">{e.title}</h6>
                           <small className="text-muted d-block mb-2">{new Date(e.createdOn!).toLocaleDateString()}</small>
-                          <p className="card-text mb-3">
-                            <div dangerouslySetInnerHTML={{ __html: e.content.slice(0, 120) }}></div>
-                          </p>
+                          <p className="card-text mb-3" dangerouslySetInnerHTML={{ __html: e.content.slice(0, 120) }}></p>
                           <div className="d-flex justify-content-between flex-grow-1 align-items-end">
                             <button className="btn btn-outline-primary btn-sm" onClick={() => navigate(`/essays/${e.id}`)}>
                               View
@@ -261,9 +259,7 @@ const HomePage = () => {
                           </div>
                           <h6 className="card-title mb-1">{e.title}</h6>
                           <small className="text-muted d-block mb-2">{new Date(e.createdOn!).toLocaleDateString()}</small>
-                          <p className="card-text mb-3">
-                            <div dangerouslySetInnerHTML={{ __html: e.content.slice(0, 120) }}></div>
-                          </p>
+                          <p className="card-text mb-3" dangerouslySetInnerHTML={{ __html: e.content.slice(0, 120) }}></p>
                           <div className="d-flex justify-content-between flex-grow-1 align-items-end">
                             <button className="btn btn-outline-primary btn-sm" onClick={() => navigate(`/essays/${e.id}`)}>
                               View
@@ -339,9 +335,7 @@ const HomePage = () => {
                           </div>
                           <h6 className="card-title mb-1">{e.title}</h6>
                           <small className="text-muted d-block mb-2">{new Date(e.createdOn!).toLocaleDateString()}</small>
-                          <p className="card-text mb-3">
-                            <div dangerouslySetInnerHTML={{ __html: e.content.slice(0, 120) }}></div>
-                          </p>
+                          <p className="card-text mb-3" dangerouslySetInnerHTML={{ __html: e.content.slice(0, 120) }}></p>
                           <div className="d-flex justify-content-between align-items-end flex-grow-1">
                             <button className="btn btn-outline-primary btn-sm " onClick={() => navigate(`/essays/${e.id}`)}>
                               View
